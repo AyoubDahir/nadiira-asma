@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link active" href="{% url 'userprofile:profile' request.user.username %}">Update
+                        account
+                        info</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'userprofile:info' request.user.username %}">Update profile
+                        info</a>
+                </li>
+
+            </ul>
+            <br>
+            <br>
+            <form method="post">{% csrf_token %}
+                {{ form.as_p }}
+                <input type="submit" value="Update">
+            </form>
+        </div>
+    </div>
+{% endblock %}
