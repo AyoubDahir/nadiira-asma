@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 
+from apps.company.models import Company
+
 
 class Country(models.Model):
     name = models.CharField(max_length=100)
@@ -29,8 +31,9 @@ class Warehouse(models.Model):
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    departure_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
-    arrival_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE)
+    departure_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
+                                            related_name='order_departure_warehouse')
+    arrival_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='order_arrival_warehouse')
 
     sender_fullname = models.CharField(max_length=100)
     recipient_fullname = models.CharField(max_length=100)
@@ -48,15 +51,15 @@ class Order(models.Model):
         ('BARE', 'Без упаковки'),
     )
 
-    cargo_type = models.CharField(max_length=1, choices=CARGO_TYPE_SET)
+    cargo_type = models.CharField(max_length=4, choices=CARGO_TYPE_SET)
 
-    cargo_len = models.DecimalField(decimal_places=2)
-    cargo_width = models.DecimalField(decimal_places=2)
-    cargo_depth = models.DecimalField(decimal_places=2)
+    cargo_len = models.DecimalField(decimal_places=2, max_digits=10)
+    cargo_width = models.DecimalField(decimal_places=2, max_digits=10)
+    cargo_depth = models.DecimalField(decimal_places=2, max_digits=10)
 
-    cargo_weight = models.DecimalField(decimal_places=2)
+    cargo_weight = models.DecimalField(decimal_places=2, max_digits=10)
 
-    insurance_price = models.DecimalField(decimal_places=2)
+    insurance_price = models.DecimalField(decimal_places=2, max_digits=15)
 
     additional_info = models.TextField(max_length=5000, blank=True)
 
@@ -69,3 +72,34 @@ class Order(models.Model):
                f' ({self.departure_warehouse.city} - {self.arrival_warehouse.city})'
 
 
+class Transport(models.Model):
+    TRANSPORT_TYPE_SET = (
+        ('CAR', 'Грузовик'),
+        ('TRAIN', 'Поезд'),
+        ('PLANE', 'Самолёт'),
+    )
+    transport_type = models.CharField(max_length=5, choices=TRANSPORT_TYPE_SET)
+    number = models.CharField(max_length=20, blank=True)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+
+class Sending(models.Model):
+    departure_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
+                                            related_name='sending_departure_warehouse')
+    arrival_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='sending_arrival_warehouse')
+
+    total_volume = models.DecimalField(decimal_places=2, max_digits=10)
+    occupied_volume = models.DecimalField(decimal_places=2, max_digits=10)
+
+    transport = models.ForeignKey(Transport, on_delete=models.CASCADE)
+
+    orders = models.ManyToManyField(Order)
+
+    @property
+    def free_volume(self):
+        return round(self.total_volume - self.occupied_volume, 2)
+
+
+class Application(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    sending = models.ForeignKey(Sending, on_delete=models.CASCADE)

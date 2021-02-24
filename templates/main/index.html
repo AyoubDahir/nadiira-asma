@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block title %}CargoDelivery{% endblock %}
+
+{% block content %}
+
+    <main role="main" class="container">
+        <br>
+        <div class="starter-template">
+            <p class="lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                Amet atque commodi consectetur consequuntur corporis delectus, deserunt dicta ducimus,
+                eveniet ipsam, iusto nam officiis possimus qui quos rem repellendus repudiandae voluptatum.</p>
+        </div>
+        {% if request.user|has_group:"users" %}
+            <p>users</p>
+        {% endif %}
+
+        {% if request.user|has_group:"owner" %}
+            <p>owner</p>
+        {% endif %}
+
+    </main>
+
+{% endblock %}
+
+

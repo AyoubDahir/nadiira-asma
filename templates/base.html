@@ -1,0 +1,36 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+            crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700&amp;amp;subset=cyrillic"
+          rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+<body>
+
+<!-- NAVBAR -->
+{% include 'navbar.html' with username=user.username %}
+
+
+<!-- MAIN BODY -->
+{% block content %}
+
+{% endblock %}
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+
+<!-- FOOTER -->
+<footer class="container">
+    <p></p>
+</footer>
+
+</body>
+</html>
