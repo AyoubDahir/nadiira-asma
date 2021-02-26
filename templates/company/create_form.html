@@ -7,17 +7,14 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user|has_group:"owner" and request.user.workerprofile.company == workerprofile.company %}
-                <p>Do you really want to delete profile
-                    of <b>{{ workerprofile.position }} {{ workerprofile.user.username }}</b>?</p>
+            {% if request.user|has_group:"owner" %}
                 <form method="post">{% csrf_token %}
                     {{ form.as_p }}
-                    <input class="btn btn-danger" type="submit" value="Delete">
+                    <input class="btn btn-success" type="submit" value="Create">
                 </form>
             {% else %}
                 <p>You are not allowed to do this</p>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}
