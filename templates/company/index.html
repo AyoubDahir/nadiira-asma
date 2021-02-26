@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <ul>
+                {% for company in company_list %}
+                    <li>{{ company.name }}
+                        <br>
+                        <a href="{% url 'company:detail' company.pk %}">Details</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

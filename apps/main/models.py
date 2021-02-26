@@ -21,7 +21,7 @@ class City(models.Model):
 
 class Warehouse(models.Model):
     address = models.CharField(max_length=250)
-
+    # TODO Add company
     city = models.ForeignKey(City, on_delete=models.CASCADE)
 
     def __str__(self):
