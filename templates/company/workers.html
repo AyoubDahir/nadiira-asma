@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <ul>
+                {% for worker in workerprofile_list %}
+                    <li>{{ worker.user.first_name }} {{ worker.user.last_name }}
+                        <br>
+                        {{ worker.user.username }}
+                        <br>
+                        {{ worker.company.name }}
+                        <br>
+                        {{ worker.position }}
+                        <br>
+                        {% if request.user|has_group:"owner" %}
+                            <a class="btn btn-warning" href="{% url 'company:updateworker' worker.pk %}">Edit</a>
+                            <a class="btn btn-danger" href="{% url 'company:deleteworker' worker.pk %}">Delete</a>
+                        {% endif %}
+                        <br><br>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

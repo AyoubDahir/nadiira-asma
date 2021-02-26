@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <h2>
+                {{ company.name }}
+            </h2>
+            <p>{{ company.info }}</p>
+        </div>
+    </div>
+{% endblock %}
