@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <ul>
+                {% if request.user|has_group:"owner" %}
+                    <p>{{ request.user.workerprofile.company }}</p>
+                    <a class="btn btn-primary" href="{% url 'company:listworkers' %}">Workers of your company</a>
+                {% else %}
+                    <p>You are not allowed to do this</p>
+                {% endif %}
+
+            </ul>
+        </div>
+    </div>
+{% endblock %}

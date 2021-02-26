@@ -6,6 +6,10 @@
     <div class="container">
         <div class="row">
             <ul>
+                {% if request.user|has_group:"owner" %}
+                    <a class="btn btn-success" href="{% url 'company:addworker' %}">Add worker</a>
+                {% endif %}
+                <br><br>
                 {% for worker in workerprofile_list %}
                     <li>{{ worker.user.first_name }} {{ worker.user.last_name }}
                         <br>

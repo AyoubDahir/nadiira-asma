@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
 from apps.company.forms import WorkerProfileForm
 from apps.company.models import WorkerProfile, Company
@@ -29,7 +29,7 @@ class CreateWorkerProfile(LoginRequiredMixin, CreateView):
     (only users with owner accounts can make this)
     """
     model = WorkerProfile
-    template_name = 'company/form.html'
+    template_name = 'company/create_form.html'
     form_class = WorkerProfileForm
     login_url = 'login/'
     success_url = '/'
@@ -50,7 +50,7 @@ class UpdateWorkerProfile(LoginRequiredMixin, UpdateView):
     (only users with owner accounts can make this)
     """
     model = WorkerProfile
-    template_name = 'company/form.html'
+    template_name = 'company/update_form.html'
     form_class = WorkerProfileForm
     login_url = 'login/'
     success_url = '/'
@@ -94,3 +94,7 @@ class WorkerProfileList(LoginRequiredMixin, ListView):
             raise Http404
         else:
             return queryset
+
+
+class CompanyManagement(LoginRequiredMixin, TemplateView):
+    template_name = 'company/manage.html'
