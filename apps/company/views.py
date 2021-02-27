@@ -110,7 +110,7 @@ class WarehouseList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         """
-        Show only workers of companies same as company of creator
+        Show only warehouses of companies same as company of creator
         :return:
         """
         try:
@@ -124,7 +124,7 @@ class WarehouseList(LoginRequiredMixin, ListView):
 
 class CreateWarehouse(LoginRequiredMixin, CreateView):
     """
-    View for creation of transport company worker
+    View for creation of transport company warehouse
     (only users with owner accounts can make this)
     """
     model = Warehouse
@@ -135,7 +135,7 @@ class CreateWarehouse(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         """
-        Set company of worker same as company of creator
+        Set company of warehouse same as company of creator
         :param form:
         :return:
         """
@@ -145,7 +145,7 @@ class CreateWarehouse(LoginRequiredMixin, CreateView):
 
 class UpdateWarehouse(LoginRequiredMixin, UpdateView):
     """
-    View for updating of transport company worker
+    View for updating of transport company warehouse
     (only users with owner accounts can make this)
     """
     model = Warehouse
@@ -156,7 +156,7 @@ class UpdateWarehouse(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         """
-        Set company of worker same as company of creator
+        Set company of warehouse same as company of creator
         :param form:
         :return:
         """
@@ -166,7 +166,7 @@ class UpdateWarehouse(LoginRequiredMixin, UpdateView):
 
 class DeleteWarehouse(LoginRequiredMixin, DeleteView):
     """
-    View for updating of transport company worker
+    View for updating of transport company warehouse
     (only users with owner accounts can make this)
     """
     model = Warehouse
