@@ -21,7 +21,10 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link"
-                           href="{% url 'userprofile:profile' request.user.username %}">{{ request.user.username }}</a>
+                           href="{% url 'userprofile:profile' request.user.username %}">{{ request.user.username }}
+                            {% if request.user.workerprofile %}
+                                ({{ request.user.workerprofile.company }})
+                            {% endif %}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>

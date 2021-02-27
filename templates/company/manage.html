@@ -7,8 +7,12 @@
         <div class="row">
             <ul>
                 {% if request.user|has_group:"owner" %}
-                    <p>{{ request.user.workerprofile.company }}</p>
+                    <h3>{{ request.user.workerprofile.company }}</h3>
+                    <br>
                     <a class="btn btn-primary" href="{% url 'company:listworkers' %}">Workers of your company</a>
+                    <br>
+                    <br>
+                    <a class="btn btn-primary" href="{% url 'company:listwarehouse' %}">Warehouses of your company</a>
                 {% else %}
                     <p>You are not allowed to do this</p>
                 {% endif %}

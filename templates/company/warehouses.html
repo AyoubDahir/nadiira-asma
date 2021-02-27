@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <ul>
+                {% if request.user|has_group:"owner" %}
+                    <a class="btn btn-success" href="{% url 'company:addwarehouse' %}">Add warehouse</a>
+                {% endif %}
+                <br><br>
+                {% for warehouse in warehouse_list %}
+                    <li>{{ warehouse.address }}
+                        <br>
+                        {{ warehouse.city }}
+                        <br>
+                        {{ warehouse.city.country }}
+                        <br>
+
+                        <br>
+                        {% if request.user|has_group:"owner" %}
+                            <a class="btn btn-warning" href="{% url 'company:updatewarehouse' warehouse.pk %}">Edit</a>
+                            <a class="btn btn-danger" href="{% url 'company:deletewarehouse' warehouse.pk %}">Delete</a>
+                        {% endif %}
+                        <br><br>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
