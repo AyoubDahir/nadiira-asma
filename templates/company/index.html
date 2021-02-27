@@ -6,6 +6,10 @@
     <div class="container">
         <div class="row">
             <ul>
+                {% if request.user.workerprofile %}
+                    <a class="btn btn-primary" href="{% url 'company:manage' %}">Manage your company</a>
+                {% endif %}
+                <br><br>
                 {% for company in company_list %}
                     <li>{{ company.name }}
                         <br>
