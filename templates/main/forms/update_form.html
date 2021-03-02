@@ -8,15 +8,17 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user|has_group:"owner" and request.user.workerprofile.company == object.company %}
+            {% if request.user == object.user %}
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>
-                    <input type="submit" class="btn btn-warning" value="Update">
+                    <input type="submit" class="btn btn-success" value="Update">
                 </form>
             {% else %}
-                <p>You are not allowed to do this</p>
+                <p>You can't are not allowed to do this</p>
             {% endif %}
+
+
         </div>
     </div>
 {% endblock %}

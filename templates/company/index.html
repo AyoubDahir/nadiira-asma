@@ -7,13 +7,15 @@
         <div class="row">
             <ul>
                 {% if request.user.workerprofile %}
-                    <a class="btn btn-primary" href="{% url 'company:manage' %}">Manage your company</a>
+                    <a class="btn btn-success" href="{% url 'company:manage' %}">Manage your company</a>
                 {% endif %}
                 <br><br>
                 {% for company in company_list %}
                     <li>{{ company.name }}
                         <br>
-                        <a href="{% url 'company:detail' company.pk %}">Details</a></li>
+                        <a class="btn btn-primary" href="{% url 'company:detail' company.pk %}">Details</a>
+                        <br>
+                    </li>
                 {% endfor %}
             </ul>
         </div>

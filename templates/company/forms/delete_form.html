@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load auth_extras %}
+{% load crispy_forms_filters %}
 
 {% block content %}
     <br>
@@ -7,11 +8,13 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user|has_group:"owner" and request.user.workerprofile.company == workerprofile.company %}
+            {% if request.user|has_group:"owner" and request.user.workerprofile.company == object.company %}
+
                 <p>Do you really want to delete profile
                     of <b>{{ workerprofile.position }} {{ workerprofile.user.username }}</b>?</p>
                 <form method="post">{% csrf_token %}
-                    {{ form.as_p }}
+                    {{ form|crispy }}
+                    <br>
                     <input class="btn btn-danger" type="submit" value="Delete">
                 </form>
             {% else %}

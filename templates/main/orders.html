@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+
+            <p><a class="btn btn-success" href="{% url 'main:addorder' %}">Create order</a></p>
+            <hr>
+            {% for order in order_list %}
+                <h3>Order {{ order.pk }}</h3>
+                <p>From: {{ order.arrival_warehouse }} {{ order.sender_fullname }}</p>
+                <p>To: {{ order.departure_warehouse }} {{ order.recipient_fullname }}</p>
+                <p>Cargo type: {{ order.get_cargo_type_display }}</p>
+                <p>Size: {{ order.cargo_len }}cm x {{ order.cargo_width }}cm x {{ order.cargo_depth }}cm
+                    ({{ order.cargo_volume }} cm<sup>3</sup>)</p>
+                {% if order.direct_take %}
+                    <p>Take from: {{ order.direct_take_address }}</p>
+                {% else %}
+                    <p>Don't take from sender</p>
+                {% endif %}
+                {% if order.direct_deliver %}
+                    <p>Take from: {{ order.direct_deliver_address }}</p>
+                {% else %}
+                    <p>Don't deliver to recipient place</p>
+                {% endif %}
+                <p>Departure date: {{ order.departure_date }}</p>
+                <p>Insurance price: {{ order.insurance_price }} RUB</p>
+                <p>Additional info: {{ order.additional_info }} </p>
+
+                <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Update order</a>
+                    <a class="btn btn-danger" href="{% url 'main:deleteorder' order.pk %}">Delete order</a></p>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -13,6 +13,11 @@
                        aria-current="page"
                        href="{% url 'company:list' %}">Companies</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page.title|lower in request.path %} active {% endif %}"
+                       aria-current="page"
+                       href="{% url 'main:orders' %}">My orders</a>
+                </li>
 
             </ul>
 
@@ -21,7 +26,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <a class="nav-link"
-                           href="{% url 'userprofile:profile' request.user.username %}">{{ request.user.username }}
+                           href="{% url 'userprofile:profile' %}">{{ request.user.username }}
                             {% if request.user.workerprofile %}
                                 ({{ request.user.workerprofile.company }})
                             {% endif %}</a>
