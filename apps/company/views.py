@@ -164,6 +164,7 @@ class UpdateWarehouse(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+
 class DeleteWarehouse(LoginRequiredMixin, DeleteView):
     """
     View for updating of transport company warehouse

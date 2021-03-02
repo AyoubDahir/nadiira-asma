@@ -53,9 +53,9 @@ class Order(models.Model):
 
     cargo_type = models.CharField(max_length=4, choices=CARGO_TYPE_SET)
 
-    cargo_len = models.DecimalField(decimal_places=2, max_digits=10)
-    cargo_width = models.DecimalField(decimal_places=2, max_digits=10)
-    cargo_depth = models.DecimalField(decimal_places=2, max_digits=10)
+    cargo_len = models.DecimalField(decimal_places=1, max_digits=10)
+    cargo_width = models.DecimalField(decimal_places=1, max_digits=10)
+    cargo_depth = models.DecimalField(decimal_places=1, max_digits=10)
 
     cargo_weight = models.DecimalField(decimal_places=2, max_digits=10)
 
@@ -65,7 +65,7 @@ class Order(models.Model):
 
     @property
     def cargo_volume(self):
-        return round(self.cargo_len * self.cargo_width * self.cargo_depth, 2)
+        return round(self.cargo_len * self.cargo_width * self.cargo_depth, 1)
 
     def __str__(self):
         return f'{self.id}. {self.user.last_name}' \

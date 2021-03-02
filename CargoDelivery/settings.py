@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'phonenumber_field',
+    'crispy_forms',
 
     'apps.main',
     'apps.userprofile',
@@ -118,4 +119,4 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 LOGIN_REDIRECT_URL = '/'
 
-
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
