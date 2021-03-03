@@ -5,19 +5,19 @@
     <br>
     <div class="container">
         <div class="row">
-            <ul>
-                {% if request.user.workerprofile %}
-                    <a class="btn btn-success" href="{% url 'company:manage' %}">Manage your company</a>
-                {% endif %}
-                <br><br>
-                {% for company in company_list %}
-                    <li>{{ company.name }}
-                        <br>
-                        <a class="btn btn-primary" href="{% url 'company:detail' company.pk %}">Details</a>
-                        <br>
-                    </li>
-                {% endfor %}
-            </ul>
+
+            {% if request.user.workerprofile %}
+                <p><a class="btn btn-success" href="{% url 'company:manage' %}">Manage your company</a></p>
+                <hr>
+            {% endif %}
+            <br><br>
+            {% for company in company_list %}
+                <p>{{ company.name }}</p>
+                <p><a class="btn btn-primary" href="{% url 'company:detail' company.pk %}">Details</a></p>
+                <hr>
+
+            {% endfor %}
+
         </div>
     </div>
 {% endblock %}

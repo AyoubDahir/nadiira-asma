@@ -1,7 +1,8 @@
 from django.urls import path
 
 from apps.company.views import CreateWorkerProfile, CompanyList, CompanyDetail, WorkerProfileList, UpdateWorkerProfile, \
-    DeleteWorkerProfile, CompanyManagement, WarehouseList, CreateWarehouse, DeleteWarehouse, UpdateWarehouse
+    DeleteWorkerProfile, CompanyManagement, WarehouseList, CreateWarehouse, DeleteWarehouse, UpdateWarehouse, \
+    CreateTransport, TransportList, UpdateTransport, DeleteTransport
 
 app_name = 'company'
 
@@ -15,6 +16,11 @@ urlpatterns = [
     path('manage/warehouses/', WarehouseList.as_view(), name='listwarehouse'),
     path('manage/editwarehouse/<pk>/', UpdateWarehouse.as_view(), name='updatewarehouse'),
     path('manage/deletewarehouse/<pk>/', DeleteWarehouse.as_view(), name='deletewarehouse'),
+
+    path('manage/addtransport/', CreateTransport.as_view(), name='addtransport'),
+    path('manage/transports/', TransportList.as_view(), name='listtransport'),
+    path('manage/edittransport/<pk>/', UpdateTransport.as_view(), name='updatetransport'),
+    path('manage/deletetransport/<pk>/', DeleteTransport.as_view(), name='deletetransport'),
 
     path('manage/', CompanyManagement.as_view(), name='manage'),
 

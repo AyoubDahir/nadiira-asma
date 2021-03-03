@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <ul>
+                {% if request.user|has_group:"owner" %}
+                    <a class="btn btn-success" href="{% url 'company:addtransport' %}">Add transport</a>
+                {% endif %}
+                <br><br>
+                {% for transport in transport_list %}
+                    <li>{{ transport.get_transport_type_display }}
+                        <br>
+                        {{ transport.number }}
+
+                        <br>
+                        {% if request.user|has_group:"owner" %}
+                            <a class="btn btn-warning" href="{% url 'company:updatetransport' transport.pk %}">Edit</a>
+                            <a class="btn btn-danger" href="{% url 'company:deletetransport' transport.pk %}">Delete</a>
+                        {% endif %}
+                        <br><br>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}
