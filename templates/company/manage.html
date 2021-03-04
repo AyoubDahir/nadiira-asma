@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <ul>
-                {% if request.user|has_group:"owner" %}
+                {% if request.user.workerprofile %}
                     <h3>{{ request.user.workerprofile.company }}</h3>
                     <br>
                     <a class="btn btn-primary" href="{% url 'company:listworkers' %}">Workers of your company</a>

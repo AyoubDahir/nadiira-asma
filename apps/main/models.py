@@ -84,6 +84,8 @@ class Transport(models.Model):
 
 
 class Sending(models.Model):
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
     departure_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
                                             related_name='sending_departure_warehouse')
     arrival_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='sending_arrival_warehouse')
@@ -103,3 +105,10 @@ class Sending(models.Model):
 class Application(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     sending = models.ForeignKey(Sending, on_delete=models.CASCADE)
+
+    STATUS_SET = (
+        ('WAIT', 'Грузовик'),
+        ('CONF', 'Поезд'),
+
+    )
+    status = models.CharField(max_length=4, choices=STATUS_SET, default='WAIT')

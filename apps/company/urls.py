@@ -22,6 +22,8 @@ urlpatterns = [
     path('manage/edittransport/<pk>/', UpdateTransport.as_view(), name='updatetransport'),
     path('manage/deletetransport/<pk>/', DeleteTransport.as_view(), name='deletetransport'),
 
+
+
     path('manage/', CompanyManagement.as_view(), name='manage'),
 
     path('<pk>/', CompanyDetail.as_view(), name='detail'),

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <br>
+            <br>
+            {% if request.user|has_group:"owner" and request.user.workerprofile.company == object.company %}
+                <form method="post">{% csrf_token %}
+                    {{ form|crispy }}
+                    <br>
+                    <input type="submit" class="btn btn-warning" value="Update">
+                </form>
+            {% else %}
+                <p>You are not allowed to do this</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

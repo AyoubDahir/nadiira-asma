@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+{% load auth_extras %}
+
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <br>
+            <br>
+            {% if request.user.workerprofile %}
+
+                <form method="post">{% csrf_token %}
+                    {{ form|crispy }}
+                    <br>
+                    <input class="btn btn-success" type="submit" value="Create">
+                </form>
+            {% else %}
+                <p>You are not allowed to do this</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
