@@ -8,19 +8,15 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user.workerprofile.company == object.company %}
-
-                <p>Do you really want to delete<b> {{ object.get_transport_type_display }}</b>
-                    with number <b> {{ object.number }}</b>?</p>
+            {% if request.user|has_group:"owner" and request.user.workerprofile.company == object.company %}
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>
-                    <input class="btn btn-danger" type="submit" value="Delete">
+                    <input type="submit" class="btn btn-warning" value="Update">
                 </form>
             {% else %}
                 <p>You are not allowed to do this</p>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}

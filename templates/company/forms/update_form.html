@@ -8,7 +8,7 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user|has_group:"owner" and request.user.workerprofile.company == object.company %}
+            {% if request.user.workerprofile.company == object.company %}
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>

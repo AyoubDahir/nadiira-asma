@@ -1,10 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from apps.main.forms import OrderForm
-from apps.main.models import Order
+from apps.main.models import Order, Sending
 
 
 class MainPageView(TemplateView):
@@ -18,7 +18,7 @@ class OrderList(ListView):
 
     def get_queryset(self):
         """
-        Show only workers of companies same as company of creator
+        Show only orders of user
         :return:
         """
         try:
@@ -79,3 +79,21 @@ class DeleteOrder(LoginRequiredMixin, DeleteView):
     model = Order
     template_name = 'main/forms/delete_form.html'
     success_url = reverse_lazy('main:orders')
+
+
+class OrderSendings(LoginRequiredMixin, DetailView):
+    model = Order
+
+    template_name = 'main/order_sendings.html'
+
+    def get_queryset(self):
+        """
+        Show only orders of user
+        :return:
+        """
+        try:
+            queryset = Sending.objects.all()
+        except Exception:
+            raise Http404
+        else:
+            return queryset

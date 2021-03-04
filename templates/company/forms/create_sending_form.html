@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
-{% load auth_extras %}
 {% load crispy_forms_filters %}
+{% load auth_extras %}
+
 
 {% block content %}
     <br>
@@ -8,19 +9,16 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user.workerprofile.company == object.company %}
+            {% if request.user.workerprofile %}
 
-                <p>Do you really want to delete<b> {{ object.get_transport_type_display }}</b>
-                    with number <b> {{ object.number }}</b>?</p>
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>
-                    <input class="btn btn-danger" type="submit" value="Delete">
+                    <input class="btn btn-success" type="submit" value="Create">
                 </form>
             {% else %}
                 <p>You are not allowed to do this</p>
             {% endif %}
-
         </div>
     </div>
 {% endblock %}

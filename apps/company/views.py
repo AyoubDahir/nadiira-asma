@@ -3,9 +3,9 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
-from apps.company.forms import WorkerProfileForm, WarehouseForm, TransportForm
+from apps.company.forms import WorkerProfileForm, WarehouseForm, TransportForm, SendingForm
 from apps.company.models import WorkerProfile, Company
-from apps.main.models import Warehouse, Transport
+from apps.main.models import Warehouse, Transport, Sending
 
 
 class CompanyList(ListView):
@@ -176,7 +176,7 @@ class DeleteWarehouse(LoginRequiredMixin, DeleteView):
 
 class CreateTransport(LoginRequiredMixin, CreateView):
     """
-    View for transport creation =
+    View for transport creation
     (only users with owner accounts can make this)
     """
     model = Transport
@@ -219,7 +219,7 @@ class TransportList(LoginRequiredMixin, ListView):
 class UpdateTransport(LoginRequiredMixin, UpdateView):
     """
     View for updating of transport
-    (only users with owner accounts can make this)
+
     """
     model = Transport
     template_name = 'company/forms/update_form.html'
@@ -240,8 +240,81 @@ class UpdateTransport(LoginRequiredMixin, UpdateView):
 class DeleteTransport(LoginRequiredMixin, DeleteView):
     """
     View for updating of transport company warehouse
-    (only users with owner accounts can make this)
+
     """
     model = Transport
     template_name = 'company/forms/delete_transport_form.html'
     success_url = reverse_lazy('company:listtransport')
+
+
+class CreateSending(LoginRequiredMixin, CreateView):
+    """
+    View for sending creation
+
+    """
+    model = Sending
+    template_name = 'company/forms/create_sending_form.html'
+    form_class = SendingForm
+    login_url = 'login/'
+    success_url = reverse_lazy('company:listsending')
+
+    def form_valid(self, form):
+        """
+        Set company of sending same as company of creator
+        :param form:
+        :return:
+        """
+        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        return super().form_valid(form)
+
+
+class UpdateSending(LoginRequiredMixin, UpdateView):
+    """
+    View for updating of sending
+
+    """
+    model = Sending
+    template_name = 'company/forms/update_sending_form.html'
+    form_class = SendingForm
+    login_url = 'login/'
+    success_url = reverse_lazy('company:listsending')
+
+    def form_valid(self, form):
+        """
+        Set company of sending same as company of creator
+        :param form:
+        :return:
+        """
+        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        return super().form_valid(form)
+
+
+class DeleteSending(LoginRequiredMixin, DeleteView):
+    """
+    View for updating of transport company sending
+
+    """
+    model = Sending
+    template_name = 'company/forms/delete_sending_form.html'
+    success_url = reverse_lazy('company:listsending')
+
+
+class SendingList(LoginRequiredMixin, ListView):
+    """
+    View for list all companies sendings
+    """
+    model = Sending
+    template_name = 'company/sendings.html'
+
+    def get_queryset(self):
+        """
+        Show only sendings of companies same as company of creator
+        :return:
+        """
+        try:
+            queryset = Sending.objects.filter(
+                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company.name))
+        except Exception:
+            raise Http404
+        else:
+            return queryset
