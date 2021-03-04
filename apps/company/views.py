@@ -219,7 +219,7 @@ class TransportList(LoginRequiredMixin, ListView):
 class UpdateTransport(LoginRequiredMixin, UpdateView):
     """
     View for updating of transport
-    (only users with owner accounts can make this)
+
     """
     model = Transport
     template_name = 'company/forms/update_form.html'
@@ -240,7 +240,7 @@ class UpdateTransport(LoginRequiredMixin, UpdateView):
 class DeleteTransport(LoginRequiredMixin, DeleteView):
     """
     View for updating of transport company warehouse
-    (only users with owner accounts can make this)
+
     """
     model = Transport
     template_name = 'company/forms/delete_transport_form.html'
@@ -250,13 +250,13 @@ class DeleteTransport(LoginRequiredMixin, DeleteView):
 class CreateSending(LoginRequiredMixin, CreateView):
     """
     View for sending creation
-    (only users with owner accounts can make this)
+
     """
     model = Sending
     template_name = 'company/forms/create_sending_form.html'
     form_class = SendingForm
     login_url = 'login/'
-    success_url = reverse_lazy('company:listsendings')
+    success_url = reverse_lazy('company:listsending')
 
     def form_valid(self, form):
         """
@@ -271,13 +271,13 @@ class CreateSending(LoginRequiredMixin, CreateView):
 class UpdateSending(LoginRequiredMixin, UpdateView):
     """
     View for updating of sending
-    (only users with owner accounts can make this)
+
     """
     model = Sending
     template_name = 'company/forms/update_sending_form.html'
     form_class = SendingForm
     login_url = 'login/'
-    success_url = reverse_lazy('company:listsendings')
+    success_url = reverse_lazy('company:listsending')
 
     def form_valid(self, form):
         """
@@ -289,6 +289,16 @@ class UpdateSending(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
 
+class DeleteSending(LoginRequiredMixin, DeleteView):
+    """
+    View for updating of transport company sending
+
+    """
+    model = Sending
+    template_name = 'company/forms/delete_sending_form.html'
+    success_url = reverse_lazy('company:listsending')
+
+
 class SendingList(LoginRequiredMixin, ListView):
     """
     View for list all companies sendings
@@ -298,7 +308,7 @@ class SendingList(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         """
-        Show only transport of companies same as company of creator
+        Show only sendings of companies same as company of creator
         :return:
         """
         try:

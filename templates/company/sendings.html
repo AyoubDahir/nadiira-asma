@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <ul>
+                {% if request.user.workerprofile %}
+                    <a class="btn btn-success" href="{% url 'company:addsending' %}">Add sending</a>
+                {% endif %}
+                <br><br>
+                {% for sending in sending_list %}
+                    <li>Departure warehouse: {{ sending.departure_warehouse }}
+                        <br>
+                        Departure date: {{ sending.departure_date }}
+                        <br>
+                        Arrival warehouse: {{ sending.arrival_warehouse }}
+                        <br>
+                        Arrival date: {{ sending.arrival_date }}
+                        <br>
+                        Transport: {{ sending.transport.get_transport_type_display }} ({{ sending.transport.number }})
+                        <br>
+                        Total volume: {{ sending.total_volume }}
+                        <br>
+                        Occupied volume: {{ sending.occupied_volume }}
+                        <br>
+                        Free volume: {{ sending.free_volume }}
+                        <br>
+                        Orders:
+                        <ol>
+                            {% for order in sending.orders.all %}
+                                <li>{{ order.user }}</li>
+                            {% endfor %}
+                        </ol>
+                        {% if request.user.workerprofile %}
+                            <a class="btn btn-warning" href="{% url 'company:updatesending' sending.pk %}">Edit</a>
+                            <a class="btn btn-danger" href="{% url 'company:deletesending' sending.pk %}">Delete</a>
+                        {% endif %}
+                        <br><br>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

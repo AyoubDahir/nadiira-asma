@@ -82,13 +82,20 @@ class Transport(models.Model):
     number = models.CharField(max_length=20, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f'{self.get_transport_type_display()} ({self.number})'
+
 
 class Sending(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     departure_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
                                             related_name='sending_departure_warehouse')
+    departure_date = models.DateField()
+
     arrival_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='sending_arrival_warehouse')
+
+    arrival_date = models.DateField()
 
     total_volume = models.DecimalField(decimal_places=2, max_digits=10)
     occupied_volume = models.DecimalField(decimal_places=2, max_digits=10)

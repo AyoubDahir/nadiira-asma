@@ -25,4 +25,6 @@ class TransportForm(forms.ModelForm):
 class SendingForm(forms.ModelForm):
     class Meta:
         model = Sending
-        fields = ('departure_warehouse', 'arrival_warehouse', 'total_volume', 'occupied_volume', 'transport')
+        fields = (
+            'departure_warehouse', 'departure_date', 'arrival_warehouse', 'arrival_date', 'total_volume',
+            'occupied_volume', 'transport')

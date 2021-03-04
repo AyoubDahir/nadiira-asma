@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <ul>
-                {% if request.user|has_group:"owner" %}
+                {% if request.user.workerprofile %}
                     <a class="btn btn-success" href="{% url 'company:addtransport' %}">Add transport</a>
                 {% endif %}
                 <br><br>
