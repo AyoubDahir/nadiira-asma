@@ -5,34 +5,65 @@
     <br>
     <div class="container">
         <div class="row">
+            {% if request.user == object.user %}
+                <h3>Заказ {{ order.pk }}</h3>
+                <p>Из: {{ order.departure_warehouse }} {{ order.sender_fullname }}</p>
+                <p>В: {{ order.arrival_warehouse }} {{ order.recipient_fullname }}</p>
+                <p>Тип груза: {{ order.get_cargo_type_display }}</p>
+                <p>Размеры: {{ order.cargo_len }}см x {{ order.cargo_width }}см x {{ order.cargo_depth }}см
+                    ({{ order.cargo_volume }} м<sup>3</sup>)</p>
+                {% if order.direct_take %}
+                    <p>Забрать из: {{ order.direct_take_address }}</p>
+                {% else %}
+                    <p>Не забирать от отправителя</p>
+                {% endif %}
+                {% if order.direct_deliver %}
+                    <p>Доставить в: {{ order.direct_deliver_address }}</p>
+                {% else %}
+                    <p>Не доставлять получателю</p>
+                {% endif %}
+                <p>Дата отправления: {{ order.departure_date }}</p>
+                <p>Сумма страхования: {{ order.insurance_price }} RUB</p>
+                <p>Дополнительная информация: {{ order.additional_info }} </p>
 
-            <p><a class="btn btn-success" href="{% url 'main:addorder' %}">Create order</a></p>
-            <hr>
-
-            <h3>Order {{ order.pk }}</h3>
-            <p>From: {{ order.arrival_warehouse }} {{ order.sender_fullname }}</p>
-            <p>To: {{ order.departure_warehouse }} {{ order.recipient_fullname }}</p>
-            <p>Cargo type: {{ order.get_cargo_type_display }}</p>
-            <p>Size: {{ order.cargo_len }}cm x {{ order.cargo_width }}cm x {{ order.cargo_depth }}cm
-                ({{ order.cargo_volume }} cm<sup>3</sup>)</p>
-            {% if order.direct_take %}
-                <p>Take from: {{ order.direct_take_address }}</p>
+                <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Обновить заказ</a>
+                    <a class="btn btn-danger" href="{% url 'main:deleteorder' order.pk %}">Удалить заказ</a></p>
+                <hr>
+                <h4>Доступные отправления на вашу дату:</h4>
+                <ol>
+                    {% for sending in sendings %}
+                        {% if sending.free_volume > order.cargo_volume %}
+                            <li><b>{{ sending.company }}</b>
+                                <br>
+                                Дата доставки: {{ sending.arrival_date }}
+                                <br>
+                                {{ sending.transport.get_transport_type_display }}
+                                <br>
+                                Свободное место: {{ sending.free_volume }} м<sup>3</sup>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+                <h4>Доступные отправления на ближайшие дни:</h4>
+                <ol>
+                    {% for sending in near_sendings %}
+                        {% if sending.free_volume > order.cargo_volume %}
+                            <li><b>{{ sending.company }}</b>
+                                <br>
+                                Дата отправления: {{ sending.departure_date }}
+                                <br>
+                                Дата доставки: {{ sending.arrival_date }}
+                                <br>
+                                {{ sending.transport.get_transport_type_display }}
+                                <br>
+                                Свободное место: {{ sending.free_volume }} м<sup>3</sup>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
             {% else %}
-                <p>Don't take from sender</p>
+                <p>Вы не можете просматривать данную информацию</p>
             {% endif %}
-            {% if order.direct_deliver %}
-                <p>Take from: {{ order.direct_deliver_address }}</p>
-            {% else %}
-                <p>Don't deliver to recipient place</p>
-            {% endif %}
-            <p>Departure date: {{ order.departure_date }}</p>
-            <p>Insurance price: {{ order.insurance_price }} RUB</p>
-            <p>Additional info: {{ order.additional_info }} </p>
-
-            <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Update order</a>
-                <a class="btn btn-danger" href="{% url 'main:deleteorder' order.pk %}">Delete order</a></p>
-            <hr>
-            {{ senging_list }}
         </div>
     </div>
 {% endblock %}

@@ -8,7 +8,7 @@ urlpatterns = [
     path('orders/addorder/', CreateOrder.as_view(), name='addorder'),
     path('orders/editorder/<pk>', UpdateOrder.as_view(), name='updateorder'),
     path('orders/deleteorder/<pk>', DeleteOrder.as_view(), name='deleteorder'),
-    path('orders/<pk>/ordersendings', OrderSendings.as_view(), name='ordersendings'),
+    path('orders/ordersendings/<pk>', OrderSendings.as_view(), name='ordersendings'),
 
     path('', MainPageView.as_view(), name='index'),
 ]

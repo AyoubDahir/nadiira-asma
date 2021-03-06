@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy
@@ -82,18 +83,27 @@ class DeleteOrder(LoginRequiredMixin, DeleteView):
 
 
 class OrderSendings(LoginRequiredMixin, DetailView):
+    """
+    View for matching sendings for order
+    """
     model = Order
 
     template_name = 'main/order_sendings.html'
 
-    def get_queryset(self):
-        """
-        Show only orders of user
-        :return:
-        """
-        try:
-            queryset = Sending.objects.all()
-        except Exception:
-            raise Http404
-        else:
-            return queryset
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        matching_sendings = Sending.objects.all().filter(departure_warehouse=self.object.departure_warehouse,
+                                                         arrival_warehouse=self.object.arrival_warehouse,
+                                                         departure_date=self.object.departure_date)
+
+        near_matching_sendings = Sending.objects.all().filter(departure_warehouse=self.object.departure_warehouse,
+                                                              arrival_warehouse=self.object.arrival_warehouse,
+                                                              departure_date__gte=self.object.departure_date - datetime.timedelta(
+                                                                  days=7),
+                                                              departure_date__lte=self.object.departure_date + datetime.timedelta(
+                                                                  days=7)).difference(matching_sendings)
+
+        context['sendings'] = matching_sendings
+        context['near_sendings'] = near_matching_sendings
+        return context
