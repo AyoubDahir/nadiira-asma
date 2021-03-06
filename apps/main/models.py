@@ -65,7 +65,7 @@ class Order(models.Model):
 
     @property
     def cargo_volume(self):
-        return round(self.cargo_len * self.cargo_width * self.cargo_depth, 1)
+        return round(self.cargo_len * self.cargo_width * self.cargo_depth, 1) / 1000000
 
     def __str__(self):
         return f'{self.id}. {self.user.last_name}' \
@@ -83,7 +83,7 @@ class Transport(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f'{self.get_transport_type_display()} ({self.number})'
+        return f'{self.company}. {self.get_transport_type_display()} ({self.number})'
 
 
 class Sending(models.Model):
@@ -97,16 +97,21 @@ class Sending(models.Model):
 
     arrival_date = models.DateField()
 
-    total_volume = models.DecimalField(decimal_places=2, max_digits=10)
-    occupied_volume = models.DecimalField(decimal_places=2, max_digits=10)
+    total_volume = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Общий объём в м^3')
+    occupied_volume = models.DecimalField(decimal_places=2, max_digits=10, default=0,
+                                          verbose_name='Занятый объём в м^3')
 
     transport = models.ForeignKey(Transport, on_delete=models.CASCADE)
 
-    orders = models.ManyToManyField(Order)
+    orders = models.ManyToManyField(Order, blank=True)
 
     @property
     def free_volume(self):
         return round(self.total_volume - self.occupied_volume, 2)
+
+    def __str__(self):
+        return f'{self.company}. {self.departure_warehouse} -> {self.arrival_warehouse}.' \
+               f' {self.departure_date}-{self.arrival_date} '
 
 
 class Application(models.Model):
@@ -114,8 +119,11 @@ class Application(models.Model):
     sending = models.ForeignKey(Sending, on_delete=models.CASCADE)
 
     STATUS_SET = (
-        ('WAIT', 'Грузовик'),
-        ('CONF', 'Поезд'),
+        ('WAIT', 'Ожидается подтверждение'),
+        ('CONF', 'Подтверждено'),
 
     )
     status = models.CharField(max_length=4, choices=STATUS_SET, default='WAIT')
+
+    def __str__(self):
+        return f'{self.get_status_display()}. {self.order}. {self.sending}'
