@@ -8,8 +8,8 @@ from apps.company.models import Company
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone = PhoneNumberField(blank=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    phone = PhoneNumberField(blank=True, verbose_name='Номер телефона')
 
     def __str__(self):
         return self.user.username

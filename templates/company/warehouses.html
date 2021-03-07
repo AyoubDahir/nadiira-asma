@@ -6,26 +6,26 @@
     <div class="container">
         <div class="row">
             <ul>
-                {% if request.user|has_group:"owner" %}
-                    <a class="btn btn-success" href="{% url 'company:addwarehouse' %}">Add warehouse</a>
-                {% endif %}
-                <br><br>
-                {% for warehouse in warehouse_list %}
-                    <li>{{ warehouse.address }}
-                        <br>
-                        {{ warehouse.city }}
-                        <br>
-                        {{ warehouse.city.country }}
-                        <br>
+                {% if request.user.workerprofile %}
+                    <a class="btn btn-success" href="{% url 'company:addwarehouse' %}">Добавить склад</a>
 
-                        <br>
-                        {% if request.user|has_group:"owner" %}
-                            <a class="btn btn-warning" href="{% url 'company:updatewarehouse' warehouse.pk %}">Edit</a>
-                            <a class="btn btn-danger" href="{% url 'company:deletewarehouse' warehouse.pk %}">Delete</a>
-                        {% endif %}
-                        <br><br>
-                    </li>
-                {% endfor %}
+                    <br><br>
+                    {% for warehouse in warehouse_list %}
+                        <li>{{ warehouse.address }}
+                            <br>
+                            {{ warehouse.city }}
+                            <br>
+                            {{ warehouse.city.country }}
+                            <br>
+                                <a class="btn btn-warning" href="{% url 'company:updatewarehouse' warehouse.pk %}">Редактировать</a>
+                                <a class="btn btn-danger" href="{% url 'company:deletewarehouse' warehouse.pk %}">Удалить</a>
+
+                            <br><br>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p>У вас нет прав для просмотра данной страницы</p>
+                {% endif %}
             </ul>
         </div>
     </div>

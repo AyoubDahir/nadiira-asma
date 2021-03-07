@@ -9,15 +9,15 @@
             <br>
             <br>
             {% if request.user == object.user %}
-                <p>Do you really want to delete order
-                    from <b>{{ order.departure_warehouse }} to {{ order.arrival_warehouse }}</b>?</p>
+                <p>Вы действительно хотите удалить заказ
+                    из <b>{{ order.departure_warehouse }} в {{ order.arrival_warehouse }}</b>?</p>
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>
-                    <input class="btn btn-danger" type="submit" value="Delete">
+                    <input class="btn btn-danger" type="submit" value="Удалить">
                 </form>
             {% else %}
-                <p>You can't are not allowed to do this</p>
+                <p>У вас нет прав для этого действия</p>
             {% endif %}
 
         </div>

@@ -7,39 +7,42 @@
         <div class="row">
             <ul>
                 {% if request.user.workerprofile %}
-                    <a class="btn btn-success" href="{% url 'company:addsending' %}">Add sending</a>
+                    <a class="btn btn-success" href="{% url 'company:addsending' %}">Добавить отправление</a>
+                    <br><br>
+                    {% for sending in sending_list %}
+                        <li>Склад отправления: {{ sending.departure_warehouse }}
+                            <br>
+                            Дата отправления: {{ sending.departure_date }}
+                            <br>
+                            Склад прибытия: {{ sending.arrival_warehouse }}
+                            <br>
+                            Дата прибытия: {{ sending.arrival_date }}
+                            <br>
+                            Транспорт: {{ sending.transport.get_transport_type_display }}
+                            ({{ sending.transport.number }})
+                            <br>
+                            Общий объём: {{ sending.total_volume }}
+                            <br>
+                            Занятый объём: {{ sending.occupied_volume }}
+                            <br>
+                            Свободный объём: {{ sending.free_volume }}
+                            <br>
+                            Заказы в отправлении:
+                            <ol>
+                                {% for order in sending.orders.all %}
+                                    <li>{{ order.user }}</li>
+                                {% endfor %}
+                            </ol>
+                            <a class="btn btn-warning"
+                               href="{% url 'company:updatesending' sending.pk %}">Редактировать</a>
+                            <a class="btn btn-danger"
+                               href="{% url 'company:deletesending' sending.pk %}">Удалить</a>
+                            <br><br>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p>У вас нет прав для просмотра данной страницы</p>
                 {% endif %}
-                <br><br>
-                {% for sending in sending_list %}
-                    <li>Departure warehouse: {{ sending.departure_warehouse }}
-                        <br>
-                        Departure date: {{ sending.departure_date }}
-                        <br>
-                        Arrival warehouse: {{ sending.arrival_warehouse }}
-                        <br>
-                        Arrival date: {{ sending.arrival_date }}
-                        <br>
-                        Transport: {{ sending.transport.get_transport_type_display }} ({{ sending.transport.number }})
-                        <br>
-                        Total volume: {{ sending.total_volume }}
-                        <br>
-                        Occupied volume: {{ sending.occupied_volume }}
-                        <br>
-                        Free volume: {{ sending.free_volume }}
-                        <br>
-                        Orders:
-                        <ol>
-                            {% for order in sending.orders.all %}
-                                <li>{{ order.user }}</li>
-                            {% endfor %}
-                        </ol>
-                        {% if request.user.workerprofile %}
-                            <a class="btn btn-warning" href="{% url 'company:updatesending' sending.pk %}">Edit</a>
-                            <a class="btn btn-danger" href="{% url 'company:deletesending' sending.pk %}">Delete</a>
-                        {% endif %}
-                        <br><br>
-                    </li>
-                {% endfor %}
             </ul>
         </div>
     </div>
