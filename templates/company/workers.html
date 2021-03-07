@@ -6,26 +6,31 @@
     <div class="container">
         <div class="row">
             <ul>
-                {% if request.user|has_group:"owner" %}
-                    <a class="btn btn-success" href="{% url 'company:addworker' %}">Add worker</a>
+                {% if request.user.workerprofile %}
+                    {% if request.user|has_group:"owner" %}
+                        <a class="btn btn-success" href="{% url 'company:addworker' %}">Добавить работника</a>
+                    {% endif %}
+                    <br><br>
+                    {% for worker in workerprofile_list %}
+                        <li>{{ worker.user.first_name }} {{ worker.user.last_name }}
+                            <br>
+                            {{ worker.user.username }}
+                            <br>
+                            {{ worker.company.name }}
+                            <br>
+                            {{ worker.position }}
+                            <br>
+                            {% if request.user|has_group:"owner" %}
+                                <a class="btn btn-warning"
+                                   href="{% url 'company:updateworker' worker.pk %}">Редактировать</a>
+                                <a class="btn btn-danger" href="{% url 'company:deleteworker' worker.pk %}">Удалить</a>
+                            {% endif %}
+                            <br><br>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <p>У вас нет прав для просмотра данной страницы</p>
                 {% endif %}
-                <br><br>
-                {% for worker in workerprofile_list %}
-                    <li>{{ worker.user.first_name }} {{ worker.user.last_name }}
-                        <br>
-                        {{ worker.user.username }}
-                        <br>
-                        {{ worker.company.name }}
-                        <br>
-                        {{ worker.position }}
-                        <br>
-                        {% if request.user|has_group:"owner" %}
-                            <a class="btn btn-warning" href="{% url 'company:updateworker' worker.pk %}">Edit</a>
-                            <a class="btn btn-danger" href="{% url 'company:deleteworker' worker.pk %}">Delete</a>
-                        {% endif %}
-                        <br><br>
-                    </li>
-                {% endfor %}
             </ul>
         </div>
     </div>

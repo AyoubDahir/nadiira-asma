@@ -9,18 +9,18 @@
                 {% if request.user.workerprofile %}
                     <h3>{{ request.user.workerprofile.company }}</h3>
                     <br>
-                    <a class="btn btn-primary" href="{% url 'company:listworkers' %}">Workers of your company</a>
+                    <a class="btn btn-primary" href="{% url 'company:listworkers' %}">Работники вашей компании</a>
                     <br>
                     <br>
-                    <a class="btn btn-primary" href="{% url 'company:listwarehouse' %}">Warehouses of your company</a>
+                    <a class="btn btn-primary" href="{% url 'company:listwarehouse' %}">Склады вашей компании</a>
                     <br>
                     <br>
-                    <a class="btn btn-primary" href="{% url 'company:listtransport' %}">Transports of your company</a>
+                    <a class="btn btn-primary" href="{% url 'company:listtransport' %}">Транспорт вашей компании</a>
                     <br>
                     <br>
-                    <a class="btn btn-success" href="{% url 'company:listsending' %}">Sendings of your company</a>
+                    <a class="btn btn-success" href="{% url 'company:listsending' %}">Отправления вашей компании</a>
                 {% else %}
-                    <p>You are not allowed to do this</p>
+                    <p>У вас нет прав для просмотра данной страницы</p>
                 {% endif %}
 
             </ul>

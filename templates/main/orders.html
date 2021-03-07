@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
 
-            <p><a class="btn btn-success" href="{% url 'main:addorder' %}">Create order</a></p>
+            <p><a class="btn btn-success" href="{% url 'main:addorder' %}">Добавить заказ</a></p>
             <hr>
             {% for order in order_list %}
                 <h3>Заказ {{ order.pk }}</h3>

@@ -5,17 +5,10 @@
     <br>
     <div class="container">
         <div class="row">
-
-            {% if request.user.workerprofile %}
-                <p><a class="btn btn-success" href="{% url 'company:manage' %}">Manage your company</a></p>
-                <hr>
-            {% endif %}
-            <br><br>
             {% for company in company_list %}
-                <p>{{ company.name }}</p>
-                <p><a class="btn btn-primary" href="{% url 'company:detail' company.pk %}">Details</a></p>
+                <h3>{{ company.name }}</h3>
+                <p><a class="btn btn-primary" href="{% url 'company:detail' company.pk %}">Подробнее</a></p>
                 <hr>
-
             {% endfor %}
 
         </div>

@@ -12,10 +12,10 @@
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>
-                    <input type="submit" class="btn btn-success" value="Update">
+                    <input type="submit" class="btn btn-success" value="Редактировать">
                 </form>
             {% else %}
-                <p>You can't are not allowed to do this</p>
+                <p>У вас нет прав для этого действия</p>
             {% endif %}
 
 

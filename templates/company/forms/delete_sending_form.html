@@ -9,17 +9,17 @@
             <br>
             <br>
             {% if request.user.workerprofile.company == object.company %}
-                <p>Do you really want to delete sending
-                    from <b>{{ sending.departure_warehouse }} to {{ sending.arrival_warehouse }} on
-                        {{ sending.transport.get_transport_type_display }} with
-                        number {{ sending.transport.number }} </b>?</p>
+                <p>Вы действительно хотите удалить отправление
+                    из <b>{{ sending.departure_warehouse }} в {{ sending.arrival_warehouse }} на
+                        {{ sending.transport.get_transport_type_display }} с номером
+                        {{ sending.transport.number }} </b>?</p>
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>
-                    <input class="btn btn-danger" type="submit" value="Delete">
+                    <input class="btn btn-danger" type="submit" value="Удалить">
                 </form>
             {% else %}
-                <p>You are not allowed to do this</p>
+                <p>У вас нет прав для этого действия</p>
             {% endif %}
 
         </div>

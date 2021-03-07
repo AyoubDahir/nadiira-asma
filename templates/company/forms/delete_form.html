@@ -10,15 +10,15 @@
             <br>
             {% if request.user|has_group:"owner" and request.user.workerprofile.company == object.company %}
 
-                <p>Do you really want to delete profile
-                    of <b>{{ workerprofile.position }} {{ workerprofile.user.username }}</b>?</p>
+                <p>Вы действительно хотите удалить профиль
+                    <b>{{ workerprofile.position }} {{ workerprofile.user.username }}</b>?</p>
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>
-                    <input class="btn btn-danger" type="submit" value="Delete">
+                    <input class="btn btn-danger" type="submit" value="Удалить">
                 </form>
             {% else %}
-                <p>You are not allowed to do this</p>
+                <p>У вас нет прав для этого действия</p>
             {% endif %}
 
         </div>
