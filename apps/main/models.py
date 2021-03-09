@@ -69,8 +69,8 @@ class Order(models.Model):
         return round(self.cargo_len * self.cargo_width * self.cargo_depth, 1) / 1000000
 
     def __str__(self):
-        return f'{self.id}. {self.user.last_name}' \
-               f' ({self.departure_warehouse.city} - {self.arrival_warehouse.city})'
+        return f'Заказ №{self.id}. {self.user.last_name}' \
+               f' ({self.departure_warehouse.city} - {self.arrival_warehouse.city}). {self.departure_date}'
 
     cargo_volume.fget.short_description = 'Объём груза (м^3)'
 
@@ -115,19 +115,20 @@ class Sending(models.Model):
         return round(self.total_volume - self.occupied_volume, 2)
 
     def __str__(self):
-        return f'{self.company}. {self.departure_warehouse} -> {self.arrival_warehouse}.' \
+        return f'Отправление №{self.id}. {self.company}. {self.departure_warehouse} -> {self.arrival_warehouse}.' \
                f' {self.departure_date}-{self.arrival_date} '
 
     free_volume.fget.short_description = 'Свободное место (м^3)'
 
 
 class Application(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, verbose_name='Заказ')
+    order = models.OneToOneField(to=Order, on_delete=models.CASCADE, verbose_name='Заказ')
     sending = models.ForeignKey(Sending, on_delete=models.CASCADE, verbose_name='Отправление')
 
     STATUS_SET = (
         ('WAIT', 'Ожидается подтверждение'),
         ('CONF', 'Подтверждено'),
+        ('DECL', 'Отклонено'),
 
     )
     status = models.CharField(max_length=4, choices=STATUS_SET, default='WAIT', verbose_name='Статус')
