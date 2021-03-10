@@ -92,9 +92,9 @@ class OrderSendings(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        application = Application.objects.get(order=self.object)
-
-        if not application:
+        try:
+            application = Application.objects.get(order=self.object)
+        except Exception:
             matching_sendings = Sending.objects.all().filter(departure_warehouse=self.object.departure_warehouse,
                                                              arrival_warehouse=self.object.arrival_warehouse,
                                                              departure_date=self.object.departure_date)
@@ -139,6 +139,10 @@ class CreateApplication(LoginRequiredMixin, CreateView):
 
 
 class ApplicationList(ListView):
+    """
+    View for list all applications
+    (for users)
+    """
     model = Application
 
     template_name = 'main/applications.html'
@@ -154,3 +158,13 @@ class ApplicationList(ListView):
             raise Http404
         else:
             return queryset
+
+
+class DeleteApplication(LoginRequiredMixin, DeleteView):
+    """
+    View for deleting application
+    (for users)
+    """
+    model = Application
+    template_name = 'main/forms/delete_application_form.html'
+    success_url = reverse_lazy('main:orders')

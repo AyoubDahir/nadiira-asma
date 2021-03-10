@@ -132,6 +132,7 @@ class Application(models.Model):
 
     )
     status = models.CharField(max_length=4, choices=STATUS_SET, default='WAIT', verbose_name='Статус')
+    info = models.CharField(max_length=1000, blank=True, verbose_name='Информация по заявке')
 
     def __str__(self):
         return f'{self.get_status_display()}. {self.order}. {self.sending}'

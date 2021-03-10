@@ -1,7 +1,7 @@
 from django.urls import path
 
 from apps.main.views import MainPageView, OrderList, CreateOrder, UpdateOrder, DeleteOrder, OrderSendings, \
-    CreateApplication, ApplicationList
+    CreateApplication, ApplicationList, DeleteApplication
 
 app_name = 'main'
 urlpatterns = [
@@ -11,6 +11,7 @@ urlpatterns = [
     path('orders/deleteorder/<pk>', DeleteOrder.as_view(), name='deleteorder'),
     path('orders/ordersendings/<pk>', OrderSendings.as_view(), name='ordersendings'),
 
+    path('application/deleteapplication/<pk>', DeleteApplication.as_view(), name='deleteapplication'),
     path('application/<order_pk>/<sending_pk>', CreateApplication.as_view(), name='addaplication'),
     path('applications/', ApplicationList.as_view(), name='applications'),
 

@@ -28,6 +28,8 @@ urlpatterns = [
     path('manage/editsending/<pk>/', UpdateSending.as_view(), name='updatesending'),
     path('manage/deletesending/<pk>/', DeleteSending.as_view(), name='deletesending'),
 
+
+
     path('manage/', CompanyManagement.as_view(), name='manage'),
 
     path('<pk>/', CompanyDetail.as_view(), name='detail'),

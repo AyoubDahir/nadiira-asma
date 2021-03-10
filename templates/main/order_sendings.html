@@ -72,6 +72,8 @@
                     <br>
                     <p>{{ application.sending }}</p>
                     <p>{{ application.get_status_display }}</p>
+                    <p><a class="btn btn-danger" href="{% url 'main:deleteapplication' application.pk %}">Удалить
+                        заявку</a></p>
                 {% endif %}
             {% else %}
                 <p>Вы не можете просматривать данную информацию</p>
