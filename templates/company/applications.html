@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <h3>Заявки для вашей компании</h3>
+            <hr>
+            {% for application in application_list %}
+                <br>
+                <p>{{ application.order }}</p>
+                <p>{{ application.sending }}</p>
+                {% if application.status == 'WAIT' %}
+                    <div class="alert alert-warning" role="alert">
+                        <p>Статус: {{ application.get_status_display }}</p>
+                        <p>{{ application.info }}</p>
+                    </div>
+                {% elif application.status == 'CONF' %}
+                    <div class="alert alert-success" role="alert">
+                        <p>Статус: {{ application.get_status_display }}</p>
+                        <p>{{ application.info }}</p>
+                    </div>
+                {% elif application.status == 'DECL' %}
+                    <div class="alert alert-danger" role="alert">
+                        <p>Статус: {{ application.get_status_display }}</p>
+                        <p>{{ application.info }}</p>
+                    </div>
+                {% endif %}
+                <a class="btn btn-success" href="{% url 'company:updateapplicationmanage' application.pk %}">Управлять
+                    заявкой</a>
+                <br>
+                <hr>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

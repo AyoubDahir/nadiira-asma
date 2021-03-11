@@ -19,6 +19,10 @@
                     <br>
                     <br>
                     <a class="btn btn-success" href="{% url 'company:listsending' %}">Отправления вашей компании</a>
+                    <br>
+                    <br>
+                    <a class="btn btn-success" href="{% url 'company:listapplicationmanage' %}">Заявки вашей
+                        компании</a>
                 {% else %}
                     <p>У вас нет прав для просмотра данной страницы</p>
                 {% endif %}
