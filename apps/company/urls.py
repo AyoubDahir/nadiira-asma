@@ -3,7 +3,7 @@ from django.urls import path
 from apps.company.views import CreateWorkerProfile, CompanyList, CompanyDetail, WorkerProfileList, UpdateWorkerProfile, \
     DeleteWorkerProfile, CompanyManagement, WarehouseList, CreateWarehouse, DeleteWarehouse, UpdateWarehouse, \
     CreateTransport, TransportList, UpdateTransport, DeleteTransport, CreateSending, SendingList, UpdateSending, \
-    DeleteSending
+    DeleteSending, ApplicationListManage, UpdateApplicationManage
 
 app_name = 'company'
 
@@ -27,6 +27,11 @@ urlpatterns = [
     path('manage/sendings/', SendingList.as_view(), name='listsending'),
     path('manage/editsending/<pk>/', UpdateSending.as_view(), name='updatesending'),
     path('manage/deletesending/<pk>/', DeleteSending.as_view(), name='deletesending'),
+
+    path('manage/applications/', ApplicationListManage.as_view(), name='listapplicationmanage'),
+    path('manage/editapplication/<pk>', UpdateApplicationManage.as_view(), name='updateapplicationmanage'),
+
+    #path('manage/orderdetail/<pk>', OrderDetailManage.as_view(), name='detailordermanage'),
 
     path('manage/', CompanyManagement.as_view(), name='manage'),
 

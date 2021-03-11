@@ -30,7 +30,10 @@
                             Заказы в отправлении:
                             <ol>
                                 {% for order in sending.orders.all %}
-                                    <li>{{ order.user }}</li>
+                                    <li>{{ order.user.last_name }}. {{ order.cargo_volume }}м<sup>3</sup>.
+                                        {{ order.cargo_weight }} кг
+
+                                    </li>
                                 {% endfor %}
                             </ol>
                             <a class="btn btn-warning"

@@ -1,7 +1,7 @@
 from django import forms
 
 from apps.company.models import WorkerProfile
-from apps.main.models import Warehouse, Transport, Sending
+from apps.main.models import Warehouse, Transport, Sending, Application
 
 
 class WorkerProfileForm(forms.ModelForm):
@@ -28,3 +28,16 @@ class SendingForm(forms.ModelForm):
         fields = (
             'departure_warehouse', 'departure_date', 'arrival_warehouse', 'arrival_date', 'total_volume',
             'occupied_volume', 'transport')
+
+
+class ApplicationManageForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(ApplicationManageForm, self).__init__(*args, **kwargs)
+        self.fields['order'].disabled = True
+        self.fields['sending'].disabled = True
+
+    class Meta:
+        model = Application
+        fields = ('order', 'sending', 'status', 'info')
+
+

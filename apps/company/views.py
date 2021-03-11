@@ -3,9 +3,9 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
-from apps.company.forms import WorkerProfileForm, WarehouseForm, TransportForm, SendingForm
+from apps.company.forms import WorkerProfileForm, WarehouseForm, TransportForm, SendingForm, ApplicationManageForm
 from apps.company.models import WorkerProfile, Company
-from apps.main.models import Warehouse, Transport, Sending
+from apps.main.models import Warehouse, Transport, Sending, Application, Order
 
 
 class CompanyList(ListView):
@@ -313,8 +313,53 @@ class SendingList(LoginRequiredMixin, ListView):
         """
         try:
             queryset = Sending.objects.filter(
-                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company.name))
+                company__name=WorkerProfile.objects.get(user=self.request.user).company.name)
         except Exception:
             raise Http404
         else:
             return queryset
+
+
+class ApplicationListManage(LoginRequiredMixin, ListView):
+    """
+    View for list all application for that company
+    """
+    model = Application
+    template_name = 'company/applications.html'
+
+    def get_queryset(self):
+        """
+        Show only applications for companies same as company of creator
+        :return:
+        """
+        try:
+            queryset = Application.objects.filter(
+                sending__company__name=WorkerProfile.objects.get(user=self.request.user).company.name)
+        except Exception:
+            raise Http404
+        else:
+            return queryset
+
+
+class UpdateApplicationManage(LoginRequiredMixin, UpdateView):
+    """
+    View for updating of application for companies
+    """
+    model = Application
+    template_name = 'company/forms/update_application_form.html'
+    form_class = ApplicationManageForm
+    login_url = 'login/'
+    success_url = reverse_lazy('company:listapplicationmanage')
+
+    def form_valid(self, form):
+        sending = self.object.sending
+        order = self.object.order
+        if order not in sending.orders.all() and self.object.status == 'CONF':
+            sending.orders.add(order)
+            sending.occupied_volume += order.cargo_volume
+            sending.save()
+        elif order in sending.orders.all() and self.object.status == 'DECL':
+            sending.orders.remove(order)
+            sending.occupied_volume -= order.cargo_volume
+            sending.save()
+        return super().form_valid(form)

@@ -29,38 +29,52 @@
                 <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Обновить заказ</a>
                     <a class="btn btn-danger" href="{% url 'main:deleteorder' order.pk %}">Удалить заказ</a></p>
                 <hr>
-                <h4>Доступные отправления на вашу дату:</h4>
-                <ol>
-                    {% for sending in sendings %}
-                        {% if sending.free_volume > order.cargo_volume %}
-                            <li><b>{{ sending.company }}</b>
-                                <br>
-                                Дата доставки: {{ sending.arrival_date }}
-                                <br>
-                                {{ sending.transport.get_transport_type_display }}
-                                <br>
-                                Свободное место: {{ sending.free_volume }} м<sup>3</sup>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ol>
-                <h4>Доступные отправления на ближайшие дни:</h4>
-                <ol>
-                    {% for sending in near_sendings %}
-                        {% if sending.free_volume > order.cargo_volume %}
-                            <li><b>{{ sending.company }}</b>
-                                <br>
-                                Дата отправления: {{ sending.departure_date }}
-                                <br>
-                                Дата доставки: {{ sending.arrival_date }}
-                                <br>
-                                {{ sending.transport.get_transport_type_display }}
-                                <br>
-                                Свободное место: {{ sending.free_volume }} м<sup>3</sup>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ol>
+                {% if not application %}
+                    <h4>Доступные отправления на вашу дату:</h4>
+                    <ol>
+                        {% for sending in sendings %}
+                            {% if sending.free_volume > order.cargo_volume %}
+                                <li><b>{{ sending.company }}</b>
+                                    <br>
+                                    Дата доставки: {{ sending.arrival_date }}
+                                    <br>
+                                    {{ sending.transport.get_transport_type_display }}
+                                    <br>
+                                    Свободное место: {{ sending.free_volume }} м<sup>3</sup>
+                                    <br>
+                                    <a class="btn btn-success"
+                                       href="{% url 'main:addaplication' order.pk sending.pk %}">Выбрать
+                                        отправление</a>
+                                    <br><br>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                    <h4>Доступные отправления на ближайшие дни:</h4>
+                    <ol>
+                        {% for sending in near_sendings %}
+                            {% if sending.free_volume > order.cargo_volume %}
+                                <li><b>{{ sending.company }}</b>
+                                    <br>
+                                    Дата отправления: {{ sending.departure_date }}
+                                    <br>
+                                    Дата доставки: {{ sending.arrival_date }}
+                                    <br>
+                                    {{ sending.transport.get_transport_type_display }}
+                                    <br>
+                                    Свободное место: {{ sending.free_volume }} м<sup>3</sup>
+                                </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ol>
+                {% else %}
+                    <h5>У вас уже есть заявка на данный заказ</h5>
+                    <br>
+                    <p>{{ application.sending }}</p>
+                    <p>{{ application.get_status_display }}</p>
+                    <p><a class="btn btn-danger" href="{% url 'main:deleteapplication' application.pk %}">Удалить
+                        заявку</a></p>
+                {% endif %}
             {% else %}
                 <p>Вы не можете просматривать данную информацию</p>
             {% endif %}

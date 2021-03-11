@@ -11,12 +11,17 @@
                 <li class="nav-item">
                     <a class="nav-link {% if page.title|lower in request.path %} active {% endif %}"
                        aria-current="page"
-                       href="{% url 'company:list' %}">Компании</a>
+                       href="{% url 'main:orders' %}">Мои заказы</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if page.title|lower in request.path %} active {% endif %}"
                        aria-current="page"
-                       href="{% url 'main:orders' %}">Мои заказы</a>
+                       href="{% url 'main:applications' %}">Мои заявки</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page.title|lower in request.path %} active {% endif %}"
+                       aria-current="page"
+                       href="{% url 'company:list' %}">Компании</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if page.title|lower in request.path %} active {% endif %}"

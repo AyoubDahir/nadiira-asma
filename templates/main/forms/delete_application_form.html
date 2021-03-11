@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <br>
+            <br>
+            {% if request.user == object.order.user %}
+                <p>Вы действительно хотите удалить заявку к заказу <b>{{ application.order }}</b>?</p>
+                <form method="post">{% csrf_token %}
+                    {{ form|crispy }}
+                    <br>
+                    <input class="btn btn-danger" type="submit" value="Удалить">
+                </form>
+            {% else %}
+                <p>У вас нет прав для этого действия</p>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}
