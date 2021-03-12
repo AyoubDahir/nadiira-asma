@@ -26,8 +26,7 @@ class SendingForm(forms.ModelForm):
     class Meta:
         model = Sending
         fields = (
-            'departure_warehouse', 'departure_date', 'arrival_warehouse', 'arrival_date', 'total_volume',
-            'occupied_volume', 'transport')
+            'departure_warehouse', 'departure_date', 'arrival_warehouse', 'arrival_date', 'total_volume', 'transport')
 
 
 class ApplicationManageForm(forms.ModelForm):
@@ -39,5 +38,3 @@ class ApplicationManageForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = ('order', 'sending', 'status', 'info')
-
-

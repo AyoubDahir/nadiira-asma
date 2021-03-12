@@ -103,16 +103,17 @@ class Sending(models.Model):
     arrival_date = models.DateField(verbose_name='Дата получения')
 
     total_volume = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Общий объём в м^3')
-    occupied_volume = models.DecimalField(decimal_places=2, max_digits=10, default=0,
-                                          verbose_name='Занятый объём в м^3')
 
     transport = models.ForeignKey(Transport, on_delete=models.CASCADE, verbose_name='Транспорт')
 
     orders = models.ManyToManyField(Order, blank=True, verbose_name='Заказы')
 
+    price_for_m3 = models.DecimalField(decimal_places=2, max_digits=10, verbose_name='Цена за кубометр')
+
     @property
     def free_volume(self):
-        return round(self.total_volume - self.occupied_volume, 2)
+        summ = sum([order.cargo_volume for order in self.orders.all()])
+        return self.total_volume - round(summ, 2)
 
     def __str__(self):
         return f'Отправление №{self.id}. {self.company}. {self.departure_warehouse} -> {self.arrival_warehouse}.' \
@@ -132,7 +133,12 @@ class Application(models.Model):
 
     )
     status = models.CharField(max_length=4, choices=STATUS_SET, default='WAIT', verbose_name='Статус')
+
     info = models.CharField(max_length=1000, blank=True, verbose_name='Информация по заявке')
+
+    @property
+    def price(self):
+        return float(self.order.cargo_volume) * float(self.sending.price_for_m3)
 
     def __str__(self):
         return f'{self.get_status_display()}. {self.order}. {self.sending}'

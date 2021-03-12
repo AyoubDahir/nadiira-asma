@@ -7,5 +7,16 @@ admin.site.register(City)
 admin.site.register(Warehouse)
 admin.site.register(Order)
 admin.site.register(Transport)
-admin.site.register(Sending)
-admin.site.register(Application)
+
+
+@admin.register(Application)
+class ApplicationAdmin(admin.ModelAdmin):
+    fields = ('order', 'sending', 'status', 'info', 'price')
+    readonly_fields = ('price',)
+
+
+@admin.register(Sending)
+class SendingAdmin(admin.ModelAdmin):
+    fields = ('company', 'departure_warehouse', 'departure_date', 'arrival_warehouse', 'arrival_date', 'total_volume',
+              'transport', 'orders', 'price_for_m3', 'free_volume')
+    readonly_fields = ('free_volume',)

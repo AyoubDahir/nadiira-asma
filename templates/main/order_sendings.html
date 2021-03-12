@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load auth_extras %}
+{% load mathfilters %}
 
 {% block content %}
     <br>
@@ -42,6 +43,8 @@
                                     <br>
                                     Свободное место: {{ sending.free_volume }} м<sup>3</sup>
                                     <br>
+                                    Стоимость {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }} руб.
+                                    <br>
                                     <a class="btn btn-success"
                                        href="{% url 'main:addaplication' order.pk sending.pk %}">Выбрать
                                         отправление</a>
@@ -63,6 +66,12 @@
                                     {{ sending.transport.get_transport_type_display }}
                                     <br>
                                     Свободное место: {{ sending.free_volume }} м<sup>3</sup>
+                                    <br>
+                                    Стоимость {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }} руб.
+                                    <br>
+                                    <a class="btn btn-success"
+                                       href="{% url 'main:addaplication' order.pk sending.pk %}">Выбрать
+                                        отправление</a>
                                 </li>
                             {% endif %}
                         {% endfor %}
@@ -72,6 +81,7 @@
                     <br>
                     <p>{{ application.sending }}</p>
                     <p>{{ application.get_status_display }}</p>
+                    <p>Стоимость: {{ application.price }} руб.</p>
                     <p><a class="btn btn-danger" href="{% url 'main:deleteapplication' application.pk %}">Удалить
                         заявку</a></p>
                 {% endif %}

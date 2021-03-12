@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            {% if request.user.workerprofile and application %}
+                <h3>Заказ {{ order.pk }}</h3>
+                <p>Из: {{ order.departure_warehouse }} {{ order.sender_fullname }}</p>
+                <p>В: {{ order.arrival_warehouse }} {{ order.recipient_fullname }}</p>
+                <p>Тип груза: {{ order.get_cargo_type_display }}</p>
+                <p>Размеры: {{ order.cargo_len }}см x {{ order.cargo_width }}см x {{ order.cargo_depth }}см
+                    ({{ order.cargo_volume }} м<sup>3</sup>)</p>
+                {% if order.direct_take %}
+                    <p>Забрать из: {{ order.direct_take_address }}</p>
+                {% else %}
+                    <p>Не забирать от отправителя</p>
+                {% endif %}
+                {% if order.direct_deliver %}
+                    <p>Доставить в: {{ order.direct_deliver_address }}</p>
+                {% else %}
+                    <p>Не доставлять получателю</p>
+                {% endif %}
+                <p>Дата отправления: {{ order.departure_date }}</p>
+                <p>Сумма страхования: {{ order.insurance_price }} RUB</p>
+                <p>Дополнительная информация: {{ order.additional_info }} </p>
+                <hr>
+                <p>Выбранное отправление: {{ application.sending }}</p>
+                <p>Стоимость: {{ application.price }}</p>
+
+            {% else %}
+                <p>Вы не можете просматривать данную информацию</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

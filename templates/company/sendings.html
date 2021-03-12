@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load mathfilters %}
 {% load auth_extras %}
 
 {% block content %}
@@ -23,16 +24,15 @@
                             <br>
                             Общий объём: {{ sending.total_volume }}
                             <br>
-                            Занятый объём: {{ sending.occupied_volume }}
-                            <br>
                             Свободный объём: {{ sending.free_volume }}
                             <br>
                             Заказы в отправлении:
                             <ol>
                                 {% for order in sending.orders.all %}
-                                    <li>{{ order.user.last_name }}. {{ order.cargo_volume }}м<sup>3</sup>.
+                                    <li>{{ order.user.last_name }} {{ order.user.first_name }}. {{ order.cargo_volume }}м<sup>3</sup>.
                                         {{ order.cargo_weight }} кг
-
+                                        Стоимость: {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }}
+                                        <a href="{% url 'company:detailordermanage' order.pk %}">Подробнее</a>
                                     </li>
                                 {% endfor %}
                             </ol>
