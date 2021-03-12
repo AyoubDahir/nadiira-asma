@@ -11,6 +11,7 @@
                 <br>
                 <p>{{ application.order }}</p>
                 <p>{{ application.sending }}</p>
+                <p> Стоимость: {{ application.price }} руб.</p>
                 {% if application.status == 'WAIT' %}
                     <div class="alert alert-warning" role="alert">
                         <p>Статус: {{ application.get_status_display }}</p>

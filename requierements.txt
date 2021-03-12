@@ -3,3 +3,4 @@ django-allauth==0.44.0
 django-crispy-forms==1.11.1
 python-dotenv==0.15.0
 psycopg2-binary==2.8.6
+django-mathfilters==1.0.0

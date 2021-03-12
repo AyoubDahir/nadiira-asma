@@ -356,10 +356,20 @@ class UpdateApplicationManage(LoginRequiredMixin, UpdateView):
         order = self.object.order
         if order not in sending.orders.all() and self.object.status == 'CONF':
             sending.orders.add(order)
-            sending.occupied_volume += order.cargo_volume
             sending.save()
         elif order in sending.orders.all() and self.object.status == 'DECL':
             sending.orders.remove(order)
-            sending.occupied_volume -= order.cargo_volume
             sending.save()
         return super().form_valid(form)
+
+
+class OrderDetailManage(LoginRequiredMixin, DetailView):
+    model = Order
+    template_name = 'company/order_detail_manage.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        application = Application.objects.get(order=self.object)
+        if application.sending.company == self.request.user.workerprofile.company:
+            context['application'] = application
+        return context

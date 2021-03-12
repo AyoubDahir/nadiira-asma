@@ -168,3 +168,12 @@ class DeleteApplication(LoginRequiredMixin, DeleteView):
     model = Application
     template_name = 'main/forms/delete_application_form.html'
     success_url = reverse_lazy('main:orders')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.status == 'CONF':
+            order = self.object.order
+            sending = self.object.sending
+            sending.orders.remove(order)
+            sending.save()
+        return super(DeleteApplication, self).delete(request, *args, **kwargs)

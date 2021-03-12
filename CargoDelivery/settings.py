@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'phonenumber_field',
     'crispy_forms',
+    'mathfilters',
 
     'apps.main',
     'apps.userprofile',
