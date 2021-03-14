@@ -4,6 +4,10 @@ from apps.main.models import Order, Application
 
 
 class OrderForm(forms.ModelForm):
+    """
+    Form for order of user
+    """
+
     class Meta:
         model = Order
         fields = ('departure_warehouse', 'arrival_warehouse', 'sender_fullname', 'recipient_fullname',
@@ -13,6 +17,11 @@ class OrderForm(forms.ModelForm):
 
 
 class ApplicationForm(forms.ModelForm):
+    """"
+    Form for application of user order.
+    Only confirmation, fields are prepopulated and not shown
+    """
+
     class Meta:
         model = Application
         fields = ()

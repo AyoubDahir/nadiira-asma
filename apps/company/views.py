@@ -98,6 +98,9 @@ class WorkerProfileList(LoginRequiredMixin, ListView):
 
 
 class CompanyManagement(LoginRequiredMixin, TemplateView):
+    """
+    View for menu of company management
+    """
     template_name = 'company/manage.html'
 
 
@@ -364,10 +367,19 @@ class UpdateApplicationManage(LoginRequiredMixin, UpdateView):
 
 
 class OrderDetailManage(LoginRequiredMixin, DetailView):
+    """
+    View for details of user's order.
+    Only for company workers
+    """
     model = Order
     template_name = 'company/order_detail_manage.html'
 
     def get_context_data(self, **kwargs):
+        """
+        Checks if order application belongs to company
+        :param kwargs:
+        :return:
+        """
         context = super().get_context_data(**kwargs)
         application = Application.objects.get(order=self.object)
         if application.sending.company == self.request.user.workerprofile.company:

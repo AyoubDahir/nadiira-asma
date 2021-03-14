@@ -9,10 +9,16 @@ from apps.main.models import Order, Sending, Application
 
 
 class MainPageView(TemplateView):
+    """
+    View for main page of site
+    """
     template_name = 'main/index.html'
 
 
 class OrderList(ListView):
+    """
+    View for list of all orders, created by user
+    """
     model = Order
 
     template_name = 'main/orders.html'
@@ -91,6 +97,10 @@ class OrderSendings(LoginRequiredMixin, DetailView):
     template_name = 'main/order_sendings.html'
 
     def get_context_data(self, **kwargs):
+        """
+        :param kwargs:
+        :return: context, with sendings appropriate for order
+        """
         context = super().get_context_data(**kwargs)
         try:
             application = Application.objects.get(order=self.object)
@@ -170,6 +180,13 @@ class DeleteApplication(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('main:orders')
 
     def delete(self, request, *args, **kwargs):
+        """
+        on delete of application order deletes from sending
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
         self.object = self.get_object()
         if self.object.status == 'CONF':
             order = self.object.order

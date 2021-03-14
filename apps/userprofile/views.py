@@ -7,6 +7,9 @@ from apps.userprofile.models import Profile
 
 
 class UpdateUserView(LoginRequiredMixin, UpdateView):
+    """
+    View for updating user information
+    """
     model = User
     form_class = UserForm
     template_name = 'userprofile/form.html'
@@ -17,6 +20,11 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
         return self.request.user
 
     def form_valid(self, form):
+        """
+        user can update only his profile
+        :param form:
+        :return:
+        """
         form.save(commit=False)
         form.instance.user = self.request.user
         form.save()
@@ -24,6 +32,9 @@ class UpdateUserView(LoginRequiredMixin, UpdateView):
 
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):
+    """
+    View for updating additional user information
+    """
     model = Profile
     form_class = ProfileForm
     template_name = 'userprofile/form.html'
@@ -34,5 +45,10 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
         return Profile.objects.filter(user=self.request.user).first()
 
     def form_valid(self, form):
+        """
+        user can update only his profile
+        :param form:
+        :return:
+        """
         form.save()
         return super().form_valid(form)
