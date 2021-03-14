@@ -8,6 +8,9 @@ from apps.company.models import Company
 
 
 class Profile(models.Model):
+    """
+    Model for extending user profile
+    """
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='Пользователь')
     phone = PhoneNumberField(blank=True, verbose_name='Номер телефона')
 
@@ -17,6 +20,9 @@ class Profile(models.Model):
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
+    """
+    Signal for creating extended user profile
+    """
     if created:
         Profile.objects.create(user=instance)
         instance.groups.add(Group.objects.get(name='users'))
@@ -24,4 +30,7 @@ def create_user_profile(sender, instance, created, **kwargs):
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
+    """
+    Signal for saving extended user profile
+    """
     instance.profile.save()

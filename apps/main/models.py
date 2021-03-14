@@ -5,6 +5,9 @@ from apps.company.models import Company
 
 
 class Country(models.Model):
+    """
+    Model of country
+    """
     name = models.CharField(max_length=100, verbose_name='Название')
 
     def __str__(self):
@@ -12,6 +15,9 @@ class Country(models.Model):
 
 
 class City(models.Model):
+    """
+    Model of city in country
+    """
     name = models.CharField(max_length=100, verbose_name='Название')
     country = models.ForeignKey(Country, on_delete=models.CASCADE, verbose_name='Страна')
 
@@ -20,6 +26,9 @@ class City(models.Model):
 
 
 class Warehouse(models.Model):
+    """
+    Model of warehouse in city
+    """
     address = models.CharField(max_length=250, verbose_name='Адрес')
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='Компания')
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='Город')
@@ -29,6 +38,9 @@ class Warehouse(models.Model):
 
 
 class Order(models.Model):
+    """
+    Model of order
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
 
     departure_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
@@ -66,7 +78,10 @@ class Order(models.Model):
 
     @property
     def cargo_volume(self):
-        return round(self.cargo_len * self.cargo_width * self.cargo_depth, 1) / 1000000
+        """
+        :return: volume of cargo in m^3
+        """
+        return round(self.cargo_len * self.cargo_width * self.cargo_depth, 2) / 1000000
 
     def __str__(self):
         return f'Заказ №{self.id}. {self.user.last_name}' \
@@ -76,6 +91,9 @@ class Order(models.Model):
 
 
 class Transport(models.Model):
+    """
+    Model of transport
+    """
     TRANSPORT_TYPE_SET = (
         ('CAR', 'Грузовик'),
         ('TRAIN', 'Поезд'),
@@ -90,6 +108,9 @@ class Transport(models.Model):
 
 
 class Sending(models.Model):
+    """
+    Model of sending
+    """
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name='Компания')
 
     departure_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
@@ -112,6 +133,9 @@ class Sending(models.Model):
 
     @property
     def free_volume(self):
+        """
+        :return: difference between total volume and sum of all orders volume in m^3
+        """
         summ = sum([order.cargo_volume for order in self.orders.all()])
         return self.total_volume - round(summ, 2)
 
@@ -123,6 +147,9 @@ class Sending(models.Model):
 
 
 class Application(models.Model):
+    """
+    Model of order application
+    """
     order = models.OneToOneField(to=Order, on_delete=models.CASCADE, verbose_name='Заказ')
     sending = models.ForeignKey(Sending, on_delete=models.CASCADE, verbose_name='Отправление')
 
@@ -138,6 +165,9 @@ class Application(models.Model):
 
     @property
     def price(self):
+        """
+        :return: calculated price, according to order volume and price of sending
+        """
         return float(self.order.cargo_volume) * float(self.sending.price_for_m3)
 
     def __str__(self):
