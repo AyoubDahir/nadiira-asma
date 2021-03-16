@@ -15,7 +15,7 @@ class MainPageView(TemplateView):
     template_name = 'main/index.html'
 
 
-class OrderList(ListView):
+class OrderList(LoginRequiredMixin, ListView):
     """
     View for list of all orders, created by user
     """
@@ -148,7 +148,7 @@ class CreateApplication(LoginRequiredMixin, CreateView):
             raise Http404('You can not do it')
 
 
-class ApplicationList(ListView):
+class ApplicationList(LoginRequiredMixin, ListView):
     """
     View for list all applications
     (for users)
