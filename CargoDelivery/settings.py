@@ -131,7 +131,6 @@ LOCALE_PATHS = ['locale', ]
 
 LANGUAGE_CODE = 'ru'
 
-
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
@@ -142,3 +141,11 @@ CACHES = {
         "KEY_PREFIX": "example"
     }
 }
+
+CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TASK_SERIALIZER = 'json'
+
+CELERY_TIMEZONE = "Europe/Moscow"

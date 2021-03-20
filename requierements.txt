@@ -8,3 +8,4 @@ django-phonenumber-field==5.0.0
 phonenumbers==8.12.18
 django-redis==4.12.1
 redis==3.5.3
+celery==5.0.5

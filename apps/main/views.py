@@ -4,6 +4,8 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 
+from CargoDelivery import celery
+
 from apps.main.forms import OrderForm, ApplicationForm
 from apps.main.models import Order, Sending, Application
 
@@ -13,6 +15,11 @@ class MainPageView(TemplateView):
     View for main page of site
     """
     template_name = 'main/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        celery.debug_task.delay()
+        return context
 
 
 class OrderList(LoginRequiredMixin, ListView):
