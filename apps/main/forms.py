@@ -10,7 +10,7 @@ class OrderForm(forms.ModelForm):
 
     class Meta:
         model = Order
-        fields = ('departure_warehouse', 'arrival_warehouse', 'sender_fullname', 'recipient_fullname',
+        fields = ('departure_city', 'arrival_city', 'sender_fullname', 'recipient_fullname',
                   'direct_take', 'direct_take_address', 'direct_deliver', 'direct_deliver_address',
                   'departure_date', 'cargo_type', 'cargo_len', 'cargo_width', 'cargo_depth', 'cargo_weight',
                   'insurance_price', 'additional_info')

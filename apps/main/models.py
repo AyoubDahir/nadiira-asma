@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 from apps.company.models import Company
 
@@ -43,10 +45,10 @@ class Order(models.Model):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
 
-    departure_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
-                                            related_name='order_departure_warehouse', verbose_name='Склад отправления')
-    arrival_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE, related_name='order_arrival_warehouse',
-                                          verbose_name='Склад получения')
+    departure_city = models.ForeignKey(City, on_delete=models.CASCADE,
+                                            related_name='order_departure_city', verbose_name='Город отправления')
+    arrival_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='order_arrival_city',
+                                          verbose_name='Город получения')
 
     sender_fullname = models.CharField(max_length=100, verbose_name='ФИО отправителя')
     recipient_fullname = models.CharField(max_length=100, verbose_name='ФИО получателя')
@@ -85,7 +87,7 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Заказ №{self.id}. {self.user.last_name}' \
-               f' ({self.departure_warehouse.city} - {self.arrival_warehouse.city}). {self.departure_date}'
+               f' ({self.departure_city} - {self.arrival_city}). {self.departure_date}'
 
     cargo_volume.fget.short_description = 'Объём груза (м^3)'
 
@@ -172,3 +174,18 @@ class Application(models.Model):
 
     def __str__(self):
         return f'{self.get_status_display()}. {self.order}. {self.sending}'
+
+
+@receiver(post_save, sender=Sending)
+def new_sendings_email(sender, instance, created, **kwargs):
+    """
+    Signal for sending emails with new sendings
+    """
+    if created:
+        for order in Order.objects.all():
+            if instance.departure_city == order.departure_warehouse.city and \
+                    instance.arrival_city == order.arrival_warehouse.city and \
+                    instance.departure_date == order.departure_date:
+                print('Send email')
+                print(f'User:{order.user}')
+

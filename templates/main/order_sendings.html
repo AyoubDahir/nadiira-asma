@@ -10,8 +10,10 @@
         <div class="row">
             {% if request.user == object.user %}
                 <h3>Заказ {{ order.pk }}</h3>
-                <p>Из: {{ order.departure_warehouse }} {{ order.sender_fullname }}</p>
-                <p>В: {{ order.arrival_warehouse }} {{ order.recipient_fullname }}</p>
+                <p>Из: {{ order.departure_city }}</p>
+                <p>Отправитель: {{ order.sender_fullname }}</p>
+                <p>В: {{ order.arrival_city }}</p>
+                <p>Получатель:{{ order.recipient_fullname }}</p>
                 <p>Тип груза: {{ order.get_cargo_type_display }}</p>
                 <p>Размеры: {{ order.cargo_len }}см x {{ order.cargo_width }}см x {{ order.cargo_depth }}см
                     ({{ order.cargo_volume }} м<sup>3</sup>)</p>
@@ -39,7 +41,13 @@
                             {% if sending.free_volume > order.cargo_volume %}
                                 <li><b>{{ sending.company }}</b>
                                     <br>
+                                    Дата отправления: {{ sending.departure_date }}
+                                    <br>
                                     Дата доставки: {{ sending.arrival_date }}
+                                    <br>
+                                    Склад отправления: {{ sending.departure_warehouse }}
+                                    <br>
+                                    Склад получения: {{ sending.arrival_warehouse }}
                                     <br>
                                     {{ sending.transport.get_transport_type_display }}
                                     <br>
@@ -64,6 +72,10 @@
                                     Дата отправления: {{ sending.departure_date }}
                                     <br>
                                     Дата доставки: {{ sending.arrival_date }}
+                                    <br>
+                                    Склад отправления: {{ sending.departure_warehouse }}
+                                    <br>
+                                    Склад получения: {{ sending.arrival_warehouse }}
                                     <br>
                                     {{ sending.transport.get_transport_type_display }}
                                     <br>
