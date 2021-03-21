@@ -149,3 +149,5 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 
 CELERY_TIMEZONE = "Europe/Moscow"
+
+# celery -A CargoDelivery worker -l INFO -P gevent
