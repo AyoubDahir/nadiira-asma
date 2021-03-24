@@ -1,4 +1,5 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -46,9 +47,9 @@ class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
 
     departure_city = models.ForeignKey(City, on_delete=models.CASCADE,
-                                            related_name='order_departure_city', verbose_name='Город отправления')
+                                       related_name='order_departure_city', verbose_name='Город отправления')
     arrival_city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='order_arrival_city',
-                                          verbose_name='Город получения')
+                                     verbose_name='Город получения')
 
     sender_fullname = models.CharField(max_length=100, verbose_name='ФИО отправителя')
     recipient_fullname = models.CharField(max_length=100, verbose_name='ФИО получателя')
@@ -183,9 +184,17 @@ def new_sendings_email(sender, instance, created, **kwargs):
     """
     if created:
         for order in Order.objects.all():
-            if instance.departure_city == order.departure_warehouse.city and \
-                    instance.arrival_city == order.arrival_warehouse.city and \
+            if instance.departure_warehouse.city == order.departure_city and \
+                    instance.arrival_warehouse.city == order.arrival_city and \
                     instance.departure_date == order.departure_date:
-                print('Send email')
+
+                need_send = True
+                try:
+                    if not order.application or order.application != 'CONF':
+                        need_send = False
+                except ObjectDoesNotExist:
+                    pass
+
+                print(need_send)
                 print(f'User:{order.user}')
 
