@@ -3,8 +3,12 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 
+from CargoDelivery import settings
 from apps.company.models import Company
+from apps.main.tasks import send_email_new_sending
 
 
 class Country(models.Model):
@@ -88,7 +92,7 @@ class Order(models.Model):
 
     def __str__(self):
         return f'Заказ №{self.id}. {self.user.last_name}' \
-               f' ({self.departure_city} - {self.arrival_city}). {self.departure_date}'
+               f' ({self.departure_city} -> {self.arrival_city}). {self.departure_date}'
 
     cargo_volume.fget.short_description = 'Объём груза (м^3)'
 
@@ -144,7 +148,7 @@ class Sending(models.Model):
 
     def __str__(self):
         return f'Отправление №{self.id}. {self.company}. {self.departure_warehouse} -> {self.arrival_warehouse}.' \
-               f' {self.departure_date}-{self.arrival_date} '
+               f' {self.departure_date} -> {self.arrival_date} '
 
     free_volume.fget.short_description = 'Свободное место (м^3)'
 
@@ -184,17 +188,30 @@ def new_sendings_email(sender, instance, created, **kwargs):
     """
     if created:
         for order in Order.objects.all():
+            # TODO make filtering
             if instance.departure_warehouse.city == order.departure_city and \
                     instance.arrival_warehouse.city == order.arrival_city and \
                     instance.departure_date == order.departure_date:
 
                 need_send = True
                 try:
-                    if not order.application or order.application != 'CONF':
+                    # Check for application doesn't exists
+                    if not order.application:
                         need_send = False
                 except ObjectDoesNotExist:
                     pass
+                else:
+                    # Check for application doesn't confirmed
+                    if order.application.status == 'CONF':
+                        need_send = False
+                        print(order.application.status)
 
-                print(need_send)
-                print(f'User:{order.user}')
+                if need_send:
+                    user_email = order.user.email
+                    print(user_email)
+                    subject = 'Для вашего заказа доступно новое отправление'
+                    html_message = render_to_string('emails/new_sending.html', {'id': order.id})
+                    plain_message = strip_tags(html_message)
+                    from_email = settings.DEFAULT_FROM_EMAIL
+                    send_email_new_sending.delay(subject, plain_message, from_email, user_email, html_message)
 

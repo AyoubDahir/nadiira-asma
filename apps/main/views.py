@@ -18,7 +18,6 @@ class MainPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        res = celery.add.delay(5, 15)
         return context
 
 
