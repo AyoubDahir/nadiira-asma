@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'crispy_forms',
     'mathfilters',
+    'debug_toolbar',
 
     'apps.main',
     'apps.userprofile',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
@@ -142,12 +144,32 @@ CACHES = {
     }
 }
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
+
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
 CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/0"
 CELERY_ACCEPT_CONTENT = ['application/json']
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 
-CELERY_TIMEZONE = "Europe/Moscow"
+timezone = "Europe/Moscow"
 
 # celery -A CargoDelivery worker -l INFO -P gevent
+
+
+# from apps.main.models import Sending, Company, Warehouse, Transport
+
+# s = Sending(company=Company.objects.get(id=1), departure_warehouse=Warehouse.objects.get(id=1),arrival_warehouse=Warehouse.objects.get(id=2), departure_date= '2021-02-27', arrival_date='2021-03-10',total_volume=1000, transport=Transport.objects.get(id=3), price_for_m3=5000)
+# s.save

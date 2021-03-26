@@ -12,7 +12,7 @@
             <br>
             {% if request.user == object.user %}
                 <p>Вы действительно хотите удалить заказ
-                    из <b>{{ order.departure_warehouse }} в {{ order.arrival_warehouse }}</b>?</p>
+                    из <b>{{ order.departure_city }} в {{ order.arrival_city }}</b>?</p>
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>

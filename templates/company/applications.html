@@ -11,7 +11,7 @@
             <hr>
             {% for application in application_list %}
                 <br>
-                <p>{{ application.order }}</p>
+                <p><a href="{% url 'company:detailordermanage' application.order.pk %}">{{ application.order }}</a></p>
                 <p>{{ application.sending }}</p>
                 <p> Стоимость: {{ application.price }} руб.</p>
                 {% if application.status == 'WAIT' %}

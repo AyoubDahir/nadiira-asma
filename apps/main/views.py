@@ -18,7 +18,6 @@ class MainPageView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        res = celery.add.delay(5, 15)
         return context
 
 
@@ -112,16 +111,18 @@ class OrderSendings(LoginRequiredMixin, DetailView):
         try:
             application = Application.objects.get(order=self.object)
         except Exception:
-            matching_sendings = Sending.objects.all().filter(departure_warehouse=self.object.departure_warehouse,
-                                                             arrival_warehouse=self.object.arrival_warehouse,
-                                                             departure_date=self.object.departure_date)
+            matching_sendings = Sending.objects.all().filter(
+                departure_warehouse__city=self.object.departure_city,
+                arrival_warehouse__city=self.object.arrival_city,
+                departure_date=self.object.departure_date)
 
-            near_matching_sendings = Sending.objects.all().filter(departure_warehouse=self.object.departure_warehouse,
-                                                                  arrival_warehouse=self.object.arrival_warehouse,
-                                                                  departure_date__gte=self.object.departure_date - datetime.timedelta(
-                                                                      days=7),
-                                                                  departure_date__lte=self.object.departure_date + datetime.timedelta(
-                                                                      days=7)).difference(matching_sendings)
+            near_matching_sendings = Sending.objects.all().filter(
+                departure_warehouse__city=self.object.departure_city,
+                arrival_warehouse__city=self.object.arrival_city,
+                departure_date__gte=self.object.departure_date - datetime.timedelta(
+                    days=7),
+                departure_date__lte=self.object.departure_date + datetime.timedelta(
+                    days=7)).difference(matching_sendings)
 
             context['sendings'] = matching_sendings
             context['near_sendings'] = near_matching_sendings
