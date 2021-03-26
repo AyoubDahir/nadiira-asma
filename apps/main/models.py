@@ -8,7 +8,7 @@ from django.utils.html import strip_tags
 
 from CargoDelivery import settings
 from apps.company.models import Company
-from apps.main.tasks import send_email_new_sending
+from apps.main.tasks import send_email_celery
 
 
 class Country(models.Model):
@@ -207,11 +207,32 @@ def new_sendings_email(sender, instance, created, **kwargs):
                         print(order.application.status)
 
                 if need_send:
+                    # TODO add more info to email
                     user_email = order.user.email
-                    print(user_email)
                     subject = 'Для вашего заказа доступно новое отправление'
                     html_message = render_to_string('emails/new_sending.html', {'id': order.id})
                     plain_message = strip_tags(html_message)
                     from_email = settings.DEFAULT_FROM_EMAIL
-                    send_email_new_sending.delay(subject, plain_message, from_email, user_email, html_message)
+                    send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
 
+
+@receiver(post_save, sender=Application)
+def application_status_email(sender, instance, created, **kwargs):
+    """
+    Signal for sending emails with new sendings
+    """
+    status = ''
+    if instance.status == 'CONF':
+        status = 'Подтверждено'
+    elif instance.status == 'DECL':
+        status = 'Отклонено'
+
+
+    if status:
+        # TODO add more info to email
+        user_email = instance.order.user.email
+        subject = 'Обновлён статус заявки'
+        html_message = render_to_string('emails/application_status.html', {'status': status})
+        plain_message = strip_tags(html_message)
+        from_email = settings.DEFAULT_FROM_EMAIL
+        send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
