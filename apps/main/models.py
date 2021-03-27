@@ -7,8 +7,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 
 from CargoDelivery import settings
-from apps.company.models import Company
-from apps.main.tasks import send_email_celery
+from apps.company.models import Company, WorkerProfile
+from apps.main.tasks import send_email_celery, send_many_email_celery
 
 
 class Country(models.Model):
@@ -219,14 +219,13 @@ def new_sendings_email(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Application)
 def application_status_email(sender, instance, created, **kwargs):
     """
-    Signal for sending emails with new sendings
+    Signal for sending emails when manager change its status
     """
     status = ''
     if instance.status == 'CONF':
         status = 'Подтверждено'
     elif instance.status == 'DECL':
         status = 'Отклонено'
-
 
     if status:
         # TODO add more info to email
@@ -236,3 +235,22 @@ def application_status_email(sender, instance, created, **kwargs):
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
         send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
+
+
+@receiver(post_save, sender=Application)
+def application_created_email(sender, instance, created, **kwargs):
+    """
+    Signal for sending emails when new application created
+    """
+    if created:
+        emails = []
+        workers_list = WorkerProfile.objects.filter(company__sending__application=instance)
+        for worker in workers_list:
+            emails.append(worker.user.email)
+
+        # TODO add more info to email
+        subject = 'Появилась новая заявка для вашей компании'
+        html_message = render_to_string('emails/application_created.html')
+        plain_message = strip_tags(html_message)
+        from_email = settings.DEFAULT_FROM_EMAIL
+        send_many_email_celery.delay(subject, plain_message, from_email, emails, html_message)
