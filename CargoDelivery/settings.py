@@ -166,6 +166,8 @@ CELERY_TASK_SERIALIZER = 'json'
 
 timezone = "Europe/Moscow"
 
+SITE_URL = 'http://127.0.0.1:8000'
+
 # celery -A CargoDelivery worker -l INFO -P gevent
 
 

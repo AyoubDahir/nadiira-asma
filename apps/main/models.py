@@ -91,8 +91,8 @@ class Order(models.Model):
         return round(self.cargo_len * self.cargo_width * self.cargo_depth, 2) / 1000000
 
     def __str__(self):
-        return f'Заказ №{self.id}. {self.user.last_name}' \
-               f' ({self.departure_city} -> {self.arrival_city}). {self.departure_date}'
+        return f'Заказ №{self.id}. ({self.sender_fullname}.' \
+               f' {self.departure_city} -> {self.arrival_city}. {self.recipient_fullname}) . {self.departure_date}'
 
     cargo_volume.fget.short_description = 'Объём груза (м^3)'
 
@@ -208,7 +208,8 @@ def new_sendings_email(sender, instance, created, **kwargs):
                 # TODO add more info to email
                 user_email = order.user.email
                 subject = 'Для вашего заказа доступно новое отправление'
-                html_message = render_to_string('emails/new_sending.html', {'id': order.id})
+                html_message = render_to_string('emails/new_sending.html',
+                                                {'order': order, 'sending': instance, 'SITE_URL': settings.SITE_URL})
                 plain_message = strip_tags(html_message)
                 from_email = settings.DEFAULT_FROM_EMAIL
                 send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)

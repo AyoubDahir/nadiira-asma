@@ -1,3 +1,4 @@
+{% load mathfilters %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,8 +13,23 @@
 <body>
 <div class="container">
     <div class="row">
-        <h2>Для вашего заказа появилось новое отправление</h2>
-        <p></p>
+        <h2>Для вашего заказа №{{ order.id }} из {{ order.departure_city }} в {{ order.arrival_city }} появилось
+            новое отправление</h2>
+        <h4>Отправление №{{ sending.id }}</h4>
+        <ul>
+            <li>Компания: {{ sending.company.name }}</li>
+            <li>Склад отправления: {{ sending.departure_warehouse }}</li>
+            <li>Склад доставки: {{ sending.arrival_warehouse }}</li>
+            <li>
+                Дата доставки: {{ sending.arrival_date }}
+            </li>
+            <li>
+                Транспорт:
+                {{ sending.transport.get_transport_type_display }}
+            </li>
+            <li>Стоимость <b> {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }} руб. </b></li>
+        </ul>
+        <p><a href="{{ SITE_URL }}{% url 'main:ordersendings' order.pk %}"><b>Перейти к заказу</b></a></p>
     </div>
 </div>
 </body>
