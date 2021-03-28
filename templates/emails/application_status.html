@@ -17,6 +17,7 @@
             заявки</h2>
         <h4>Статус заявки: {{ status }}</h4>
         <p>Компания: {{ sending.company.name }} </p>
+        <p><a href="{{ SITE_URL }}{% url 'main:ordersendings' order.pk %}"><b>Перейти к заказу</b></a></p>
     </div>
 </div>
 </body>

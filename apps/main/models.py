@@ -184,7 +184,7 @@ class Application(models.Model):
 @receiver(post_save, sender=Sending)
 def new_sendings_email(sender, instance, created, **kwargs):
     """
-    Signal for sending emails with new sendings
+    Signal for sending emails with new sendings (for users)
     """
     if created:
 
@@ -217,7 +217,7 @@ def new_sendings_email(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Application)
 def application_status_email(sender, instance, created, **kwargs):
     """
-    Signal for sending emails when manager change its status
+    Signal for sending emails when manager change its status (for users)
     """
     status = ''
     if instance.status == 'CONF':
@@ -226,13 +226,13 @@ def application_status_email(sender, instance, created, **kwargs):
         status = 'Отклонено'
 
     if status:
-        # TODO add more info to email
         user_email = instance.order.user.email
         order = Order.objects.get(application=instance)
         sending = Sending.objects.get(application=instance)
         subject = 'Обновлён статус заявки'
         html_message = render_to_string('emails/application_status.html',
-                                        {'status': status, 'order': order, 'sending': sending})
+                                        {'status': status, 'order': order, 'sending': sending,
+                                         'SITE_URL': settings.SITE_URL})
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
         send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
@@ -241,7 +241,7 @@ def application_status_email(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Application)
 def application_created_email(sender, instance, created, **kwargs):
     """
-    Signal for sending emails when new application created
+    Signal for sending emails when new application created (for workers)
     """
     if created:
         emails = []
@@ -249,9 +249,12 @@ def application_created_email(sender, instance, created, **kwargs):
         for worker in workers_list:
             emails.append(worker.user.email)
 
-        # TODO add more info to email
+        order = Order.objects.get(application=instance)
+        sending = Sending.objects.get(application=instance)
         subject = 'Появилась новая заявка для вашей компании'
-        html_message = render_to_string('emails/application_created.html')
+        html_message = render_to_string('emails/application_created.html',
+                                        {'order': order, 'sending': sending, 'application': instance,
+                                         'SITE_URL': settings.SITE_URL})
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
         send_many_email_celery.delay(subject, plain_message, from_email, emails, html_message)

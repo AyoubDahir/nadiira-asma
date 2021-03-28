@@ -29,9 +29,9 @@ urlpatterns = [
     path('manage/deletesending/<pk>/', DeleteSending.as_view(), name='deletesending'),
 
     path('manage/applications/', ApplicationListManage.as_view(), name='listapplicationmanage'),
-    path('manage/editapplication/<pk>', UpdateApplicationManage.as_view(), name='updateapplicationmanage'),
+    path('manage/editapplication/<pk>/', UpdateApplicationManage.as_view(), name='updateapplicationmanage'),
 
-    path('manage/orderdetail/<pk>', OrderDetailManage.as_view(), name='detailordermanage'),
+    path('manage/orderdetail/<pk>/', OrderDetailManage.as_view(), name='detailordermanage'),
 
     path('manage/', CompanyManagement.as_view(), name='manage'),
 

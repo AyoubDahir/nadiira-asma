@@ -14,7 +14,17 @@
 <div class="container">
     <div class="row">
         <h2>Создана новая заявка для вашей компании</h2>
-        <p></p>
+        <h4>Для вашего отправления №{{ sending.id }} из {{ sending.departure_warehouse }}
+            в {{ sending.arrival_warehouse }}
+            появилась новая заявка</h4>
+
+        <p><a href="{{ SITE_URL }}{% url 'company:detailordermanage' order.pk %}"><b>Перейти к заказу</b></a></p>
+
+        <p> Стоимость: {{ application.price }} руб.</p>
+        <p>Email заказчика: <a
+                href="mailto:{{ application.order.user.email }}">{{ application.order.user.email }} </a></p>
+        <br>
+        <p><a href="{{ SITE_URL }}{% url 'company:listapplicationmanage' %}"><b>Перейти к заявкам</b></a></p>
     </div>
 </div>
 </body>
