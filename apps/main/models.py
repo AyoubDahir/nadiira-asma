@@ -205,7 +205,6 @@ def new_sendings_email(sender, instance, created, **kwargs):
                     need_send = True
 
             if need_send:
-                # TODO add more info to email
                 user_email = order.user.email
                 subject = 'Для вашего заказа доступно новое отправление'
                 html_message = render_to_string('emails/new_sending.html',
@@ -229,8 +228,11 @@ def application_status_email(sender, instance, created, **kwargs):
     if status:
         # TODO add more info to email
         user_email = instance.order.user.email
+        order = Order.objects.get(application=instance)
+        sending = Sending.objects.get(application=instance)
         subject = 'Обновлён статус заявки'
-        html_message = render_to_string('emails/application_status.html', {'status': status})
+        html_message = render_to_string('emails/application_status.html',
+                                        {'status': status, 'order': order, 'sending': sending})
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
         send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
