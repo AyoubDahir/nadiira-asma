@@ -13,8 +13,11 @@
 <body>
 <div class="container">
     <div class="row">
-        <h2>Статус заявки: {{ status }}</h2>
-        <p></p>
+        <h2>Для вашего заказа №{{ order.id }} из {{ order.departure_city }} в {{ order.arrival_city }} обновлён статус
+            заявки</h2>
+        <h4>Статус заявки: {{ status }}</h4>
+        <p>Компания: {{ sending.company.name }} </p>
+        <p><a href="{{ SITE_URL }}{% url 'main:ordersendings' order.pk %}"><b>Перейти к заказу</b></a></p>
     </div>
 </div>
 </body>

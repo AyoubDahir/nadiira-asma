@@ -90,7 +90,7 @@ class WorkerProfileList(LoginRequiredMixin, ListView):
         """
         try:
             queryset = WorkerProfile.objects.filter(
-                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company.name))
+                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company))
         except Exception:
             raise Http404
         else:
@@ -118,7 +118,7 @@ class WarehouseList(LoginRequiredMixin, ListView):
         """
         try:
             queryset = Warehouse.objects.filter(
-                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company.name))
+                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company))
         except Exception:
             raise Http404
         else:
@@ -212,7 +212,7 @@ class TransportList(LoginRequiredMixin, ListView):
         """
         try:
             queryset = Transport.objects.filter(
-                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company.name))
+                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company))
         except Exception:
             raise Http404
         else:
@@ -316,7 +316,7 @@ class SendingList(LoginRequiredMixin, ListView):
         """
         try:
             queryset = Sending.objects.filter(
-                company__name=WorkerProfile.objects.get(user=self.request.user).company.name)
+                company=WorkerProfile.objects.get(user=self.request.user).company)
         except Exception:
             raise Http404
         else:
@@ -337,7 +337,7 @@ class ApplicationListManage(LoginRequiredMixin, ListView):
         """
         try:
             queryset = Application.objects.filter(
-                sending__company__name=WorkerProfile.objects.get(user=self.request.user).company.name)
+                sending__company=WorkerProfile.objects.get(user=self.request.user).company)
         except Exception:
             raise Http404
         else:
@@ -361,6 +361,9 @@ class UpdateApplicationManage(LoginRequiredMixin, UpdateView):
             sending.orders.add(order)
             sending.save()
         elif order in sending.orders.all() and self.object.status == 'DECL':
+            sending.orders.remove(order)
+            sending.save()
+        elif order in sending.orders.all() and self.object.status == 'WAIT':
             sending.orders.remove(order)
             sending.save()
         return super().form_valid(form)

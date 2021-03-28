@@ -53,7 +53,7 @@
                                     <br>
                                     Свободное место: {{ sending.free_volume }} м<sup>3</sup>
                                     <br>
-                                    Стоимость {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }} руб.
+                                    Стоимость: {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }} руб.
                                     <br>
                                     <a class="btn btn-success"
                                        href="{% url 'main:addaplication' order.pk sending.pk %}">Выбрать

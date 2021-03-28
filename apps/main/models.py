@@ -91,8 +91,8 @@ class Order(models.Model):
         return round(self.cargo_len * self.cargo_width * self.cargo_depth, 2) / 1000000
 
     def __str__(self):
-        return f'Заказ №{self.id}. {self.user.last_name}' \
-               f' ({self.departure_city} -> {self.arrival_city}). {self.departure_date}'
+        return f'Заказ №{self.id}. ({self.sender_fullname}.' \
+               f' {self.departure_city} -> {self.arrival_city}. {self.recipient_fullname}) . {self.departure_date}'
 
     cargo_volume.fget.short_description = 'Объём груза (м^3)'
 
@@ -184,42 +184,40 @@ class Application(models.Model):
 @receiver(post_save, sender=Sending)
 def new_sendings_email(sender, instance, created, **kwargs):
     """
-    Signal for sending emails with new sendings
+    Signal for sending emails with new sendings (for users)
     """
     if created:
-        for order in Order.objects.all():
-            # TODO make filtering
-            if instance.departure_warehouse.city == order.departure_city and \
-                    instance.arrival_warehouse.city == order.arrival_city and \
-                    instance.departure_date == order.departure_date:
 
-                need_send = True
-                try:
-                    # Check for application doesn't exists
-                    if not order.application:
-                        need_send = False
-                except ObjectDoesNotExist:
+        for order in Order.objects.filter(departure_city=instance.departure_warehouse.city,
+                                          arrival_city=instance.arrival_warehouse.city,
+                                          departure_date=instance.departure_date):
+
+            need_send = False
+            try:
+                # Check for application doesn't exists
+                if order.application:
                     pass
-                else:
-                    # Check for application doesn't confirmed
-                    if order.application.status == 'CONF':
-                        need_send = False
-                        print(order.application.status)
+            except ObjectDoesNotExist:
+                need_send = True
+            else:
+                # Check for application doesn't confirmed
+                if order.application.status != 'CONF':
+                    need_send = True
 
-                if need_send:
-                    # TODO add more info to email
-                    user_email = order.user.email
-                    subject = 'Для вашего заказа доступно новое отправление'
-                    html_message = render_to_string('emails/new_sending.html', {'id': order.id})
-                    plain_message = strip_tags(html_message)
-                    from_email = settings.DEFAULT_FROM_EMAIL
-                    send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
+            if need_send:
+                user_email = order.user.email
+                subject = 'Для вашего заказа доступно новое отправление'
+                html_message = render_to_string('emails/new_sending.html',
+                                                {'order': order, 'sending': instance, 'SITE_URL': settings.SITE_URL})
+                plain_message = strip_tags(html_message)
+                from_email = settings.DEFAULT_FROM_EMAIL
+                send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
 
 
 @receiver(post_save, sender=Application)
 def application_status_email(sender, instance, created, **kwargs):
     """
-    Signal for sending emails when manager change its status
+    Signal for sending emails when manager change its status (for users)
     """
     status = ''
     if instance.status == 'CONF':
@@ -228,10 +226,13 @@ def application_status_email(sender, instance, created, **kwargs):
         status = 'Отклонено'
 
     if status:
-        # TODO add more info to email
         user_email = instance.order.user.email
+        order = Order.objects.get(application=instance)
+        sending = Sending.objects.get(application=instance)
         subject = 'Обновлён статус заявки'
-        html_message = render_to_string('emails/application_status.html', {'status': status})
+        html_message = render_to_string('emails/application_status.html',
+                                        {'status': status, 'order': order, 'sending': sending,
+                                         'SITE_URL': settings.SITE_URL})
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
         send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
@@ -240,7 +241,7 @@ def application_status_email(sender, instance, created, **kwargs):
 @receiver(post_save, sender=Application)
 def application_created_email(sender, instance, created, **kwargs):
     """
-    Signal for sending emails when new application created
+    Signal for sending emails when new application created (for workers)
     """
     if created:
         emails = []
@@ -248,9 +249,12 @@ def application_created_email(sender, instance, created, **kwargs):
         for worker in workers_list:
             emails.append(worker.user.email)
 
-        # TODO add more info to email
+        order = Order.objects.get(application=instance)
+        sending = Sending.objects.get(application=instance)
         subject = 'Появилась новая заявка для вашей компании'
-        html_message = render_to_string('emails/application_created.html')
+        html_message = render_to_string('emails/application_created.html',
+                                        {'order': order, 'sending': sending, 'application': instance,
+                                         'SITE_URL': settings.SITE_URL})
         plain_message = strip_tags(html_message)
         from_email = settings.DEFAULT_FROM_EMAIL
         send_many_email_celery.delay(subject, plain_message, from_email, emails, html_message)
