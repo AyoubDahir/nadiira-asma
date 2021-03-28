@@ -187,33 +187,31 @@ def new_sendings_email(sender, instance, created, **kwargs):
     Signal for sending emails with new sendings
     """
     if created:
-        for order in Order.objects.all():
-            # TODO make filtering
-            if instance.departure_warehouse.city == order.departure_city and \
-                    instance.arrival_warehouse.city == order.arrival_city and \
-                    instance.departure_date == order.departure_date:
 
-                need_send = True
-                try:
-                    # Check for application doesn't exists
-                    if not order.application:
-                        need_send = False
-                except ObjectDoesNotExist:
+        for order in Order.objects.filter(departure_city=instance.departure_warehouse.city,
+                                          arrival_city=instance.arrival_warehouse.city,
+                                          departure_date=instance.departure_date):
+
+            need_send = False
+            try:
+                # Check for application doesn't exists
+                if order.application:
                     pass
-                else:
-                    # Check for application doesn't confirmed
-                    if order.application.status == 'CONF':
-                        need_send = False
-                        print(order.application.status)
+            except ObjectDoesNotExist:
+                need_send = True
+            else:
+                # Check for application doesn't confirmed
+                if order.application.status != 'CONF':
+                    need_send = True
 
-                if need_send:
-                    # TODO add more info to email
-                    user_email = order.user.email
-                    subject = 'Для вашего заказа доступно новое отправление'
-                    html_message = render_to_string('emails/new_sending.html', {'id': order.id})
-                    plain_message = strip_tags(html_message)
-                    from_email = settings.DEFAULT_FROM_EMAIL
-                    send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
+            if need_send:
+                # TODO add more info to email
+                user_email = order.user.email
+                subject = 'Для вашего заказа доступно новое отправление'
+                html_message = render_to_string('emails/new_sending.html', {'id': order.id})
+                plain_message = strip_tags(html_message)
+                from_email = settings.DEFAULT_FROM_EMAIL
+                send_email_celery.delay(subject, plain_message, from_email, user_email, html_message)
 
 
 @receiver(post_save, sender=Application)
