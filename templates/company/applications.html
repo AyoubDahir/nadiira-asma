@@ -14,6 +14,8 @@
                 <p><a href="{% url 'company:detailordermanage' application.order.pk %}">{{ application.order }}</a></p>
                 <p>{{ application.sending }}</p>
                 <p> Стоимость: {{ application.price }} руб.</p>
+                <p>Email заказчика: <a
+                        href="mailto:{{ application.order.user.email }}">{{ application.order.user.email }} </a></p>
                 {% if application.status == 'WAIT' %}
                     <div class="alert alert-warning" role="alert">
                         <p>Статус: {{ application.get_status_display }}</p>
