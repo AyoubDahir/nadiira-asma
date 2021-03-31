@@ -42,7 +42,7 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     success_url = '/'
 
     def get_object(self):
-        return Profile.objects.filter(user=self.request.user).first()
+        return Profile.objects.get(user=self.request.user)
 
     def form_valid(self, form):
         """
