@@ -111,12 +111,12 @@ class OrderSendings(LoginRequiredMixin, DetailView):
         try:
             application = Application.objects.get(order=self.object)
         except Exception:
-            matching_sendings = Sending.objects.all().filter(
+            matching_sendings = Sending.objects.filter(
                 departure_warehouse__city=self.object.departure_city,
                 arrival_warehouse__city=self.object.arrival_city,
                 departure_date=self.object.departure_date)
 
-            near_matching_sendings = Sending.objects.all().filter(
+            near_matching_sendings = Sending.objects.filter(
                 departure_warehouse__city=self.object.departure_city,
                 arrival_warehouse__city=self.object.arrival_city,
                 departure_date__gte=self.object.departure_date - datetime.timedelta(

@@ -41,7 +41,7 @@ class CreateWorkerProfile(LoginRequiredMixin, CreateView):
         :param form:
         :return:
         """
-        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
         return super().form_valid(form)
 
 
@@ -62,7 +62,7 @@ class UpdateWorkerProfile(LoginRequiredMixin, UpdateView):
         :param form:
         :return:
         """
-        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
         return super().form_valid(form)
 
 
@@ -89,8 +89,7 @@ class WorkerProfileList(LoginRequiredMixin, ListView):
         :return:
         """
         try:
-            queryset = WorkerProfile.objects.filter(
-                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company))
+            queryset = WorkerProfile.objects.filter(company__workerprofile__user=self.request.user)
         except Exception:
             raise Http404
         else:
@@ -117,8 +116,7 @@ class WarehouseList(LoginRequiredMixin, ListView):
         :return:
         """
         try:
-            queryset = Warehouse.objects.filter(
-                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company))
+            queryset = Warehouse.objects.filter(company__workerprofile__user=self.request.user)
         except Exception:
             raise Http404
         else:
@@ -142,7 +140,7 @@ class CreateWarehouse(LoginRequiredMixin, CreateView):
         :param form:
         :return:
         """
-        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
         return super().form_valid(form)
 
 
@@ -163,7 +161,7 @@ class UpdateWarehouse(LoginRequiredMixin, UpdateView):
         :param form:
         :return:
         """
-        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
         return super().form_valid(form)
 
 
@@ -194,7 +192,7 @@ class CreateTransport(LoginRequiredMixin, CreateView):
         :param form:
         :return:
         """
-        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
         return super().form_valid(form)
 
 
@@ -211,8 +209,8 @@ class TransportList(LoginRequiredMixin, ListView):
         :return:
         """
         try:
-            queryset = Transport.objects.filter(
-                company=Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company))
+
+            queryset = Transport.objects.filter(company__workerprofile__user=self.request.user)
         except Exception:
             raise Http404
         else:
@@ -236,7 +234,7 @@ class UpdateTransport(LoginRequiredMixin, UpdateView):
         :param form:
         :return:
         """
-        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
         return super().form_valid(form)
 
 
@@ -267,7 +265,7 @@ class CreateSending(LoginRequiredMixin, CreateView):
         :param form:
         :return:
         """
-        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
         return super().form_valid(form)
 
 
@@ -288,7 +286,7 @@ class UpdateSending(LoginRequiredMixin, UpdateView):
         :param form:
         :return:
         """
-        form.instance.company = Company.objects.get(name=WorkerProfile.objects.get(user=self.request.user).company)
+        form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
         return super().form_valid(form)
 
 
@@ -315,8 +313,7 @@ class SendingList(LoginRequiredMixin, ListView):
         :return:
         """
         try:
-            queryset = Sending.objects.filter(
-                company=WorkerProfile.objects.get(user=self.request.user).company)
+            queryset = Sending.objects.filter(company__workerprofile__user=self.request.user)
         except Exception:
             raise Http404
         else:
@@ -337,7 +334,7 @@ class ApplicationListManage(LoginRequiredMixin, ListView):
         """
         try:
             queryset = Application.objects.filter(
-                sending__company=WorkerProfile.objects.get(user=self.request.user).company)
+                sending__company__workerprofile__user=self.request.user)
         except Exception:
             raise Http404
         else:
@@ -359,13 +356,11 @@ class UpdateApplicationManage(LoginRequiredMixin, UpdateView):
         order = self.object.order
         if order not in sending.orders.all() and self.object.status == 'CONF':
             sending.orders.add(order)
-            sending.save()
         elif order in sending.orders.all() and self.object.status == 'DECL':
             sending.orders.remove(order)
-            sending.save()
         elif order in sending.orders.all() and self.object.status == 'WAIT':
             sending.orders.remove(order)
-            sending.save()
+        sending.save()
         return super().form_valid(form)
 
 
