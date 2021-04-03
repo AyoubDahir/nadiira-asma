@@ -123,8 +123,6 @@ STATIC_URL = '/static/'
 
 SITE_ID = 1
 
-ACCOUNT_EMAIL_REQUIRED = True
-
 LOGIN_REDIRECT_URL = '/'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -133,29 +131,27 @@ LOCALE_PATHS = ['locale', ]
 
 LANGUAGE_CODE = 'ru'
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-        },
-        "KEY_PREFIX": "example"
-    }
-}
+#CACHES = {
+#    "default": {
+#        "BACKEND": "django_redis.cache.RedisCache",
+#       "LOCATION": "redis://127.0.0.1:6379/1",
+#        "OPTIONS": {
+#            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+#        },
+#        "KEY_PREFIX": "example"
+#    }
+#}
 
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL')
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
@@ -168,10 +164,12 @@ timezone = "Europe/Moscow"
 
 SITE_URL = 'http://127.0.0.1:8000'
 
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
 # celery -A CargoDelivery worker -l INFO -P gevent
-
-
-# from apps.main.models import Sending, Company, Warehouse, Transport
-
-# s = Sending(company=Company.objects.get(id=1), departure_warehouse=Warehouse.objects.get(id=1),arrival_warehouse=Warehouse.objects.get(id=2), departure_date= '2021-02-27', arrival_date='2021-03-10',total_volume=1000, transport=Transport.objects.get(id=3), price_for_m3=5000)
-# s.save
