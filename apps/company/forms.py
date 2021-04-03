@@ -43,6 +43,22 @@ class SendingForm(forms.ModelForm):
     Company field is prepopulated and not shown
     """
 
+    def __init__(self, *args, **kwargs):
+        if kwargs.get('user'):
+            self.user = kwargs.pop('user', None)
+            print(self.user)
+
+        super(SendingForm, self).__init__(*args, **kwargs)
+
+        self.fields['departure_warehouse'].queryset = Warehouse.objects.filter(
+            company__workerprofile__user=self.user)
+
+        self.fields['arrival_warehouse'].queryset = Warehouse.objects.filter(
+            company__workerprofile__user=self.user)
+
+        self.fields['transport'].queryset = Transport.objects.filter(
+            company__workerprofile__user=self.user)
+
     class Meta:
         model = Sending
         fields = (

@@ -1,0 +1,33 @@
+{% extends "account/base.html" %}
+
+{% load account %}
+
+{% block head_title %}Подтвердите ваш email адрес{% endblock %}
+
+
+{% block account_content %}
+    <h1>Подтвердите ваш email адрес</h1>
+
+    {% if confirmation %}
+
+        {% user_display confirmation.email_address.user as user_display %}
+
+        <p>Пожалуйста, подтвердите что
+            <a href="mailto:{{ confirmation.email_address.email }}">{{ confirmation.email_address.email }}</a> - это
+            email для пользователя {{ user_display }}.</p>
+
+        <form method="post" action="{% url 'account_confirm_email' confirmation.key %}">
+            {% csrf_token %}
+            <button type="submit">Подтверждение</button>
+        </form>
+
+    {% else %}
+
+        {% url 'account_email' as email_url %}
+
+        <p>Данная ссылка истекла или неверна. Пожалуйста,
+            <a href="{{ email_url }}">запросите новое подтверждение</a>.</p>
+
+    {% endif %}
+
+{% endblock %}

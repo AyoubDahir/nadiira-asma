@@ -259,6 +259,15 @@ class CreateSending(LoginRequiredMixin, CreateView):
     login_url = 'login/'
     success_url = reverse_lazy('company:listsending')
 
+    def get_form_kwargs(self):
+        kwargs = super(CreateSending, self).get_form_kwargs()
+        user = self.request.user
+
+        if user:
+            kwargs['user'] = user
+
+        return kwargs
+
     def form_valid(self, form):
         """
         Set company of sending same as company of creator
@@ -266,6 +275,7 @@ class CreateSending(LoginRequiredMixin, CreateView):
         :return:
         """
         form.instance.company = Company.objects.get(workerprofile__user=self.request.user)
+
         return super().form_valid(form)
 
 
@@ -279,6 +289,15 @@ class UpdateSending(LoginRequiredMixin, UpdateView):
     form_class = SendingForm
     login_url = 'login/'
     success_url = reverse_lazy('company:listsending')
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateSending, self).get_form_kwargs()
+        user = self.request.user
+
+        if user:
+            kwargs['user'] = user
+
+        return kwargs
 
     def form_valid(self, form):
         """
