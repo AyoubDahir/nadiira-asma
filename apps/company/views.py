@@ -82,13 +82,6 @@ class WorkerProfileList(LoginRequiredMixin, ListView):
             return queryset
 
 
-class CompanyManagement(LoginRequiredMixin, TemplateView):
-    """
-    View for menu of company management
-    """
-    template_name = 'company/manage.html'
-
-
 class WarehouseList(LoginRequiredMixin, ListView):
     """
     View for list all companies warehouses
