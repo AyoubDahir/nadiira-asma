@@ -46,7 +46,6 @@ class SendingForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         if kwargs.get('user'):
             self.user = kwargs.pop('user', None)
-            print(self.user)
 
         super(SendingForm, self).__init__(*args, **kwargs)
 

@@ -22,22 +22,38 @@
                     <li class="nav-item">
                         <a class="nav-link {% if page.title|lower in request.path %} active {% endif %}"
                            aria-current="page"
-                           href="{% url 'company:list' %}">Компании</a>
+                           href="{% url 'main:company_list' %}">Компании</a>
                     </li>
 
-                    {% if request.user.workerprofile %}
-                        <li class="nav-item">
-                            <a class="nav-link {% if page.title|lower in request.path %} active {% endif %}"
-                               aria-current="page"
-                               href="{% url 'company:manage' %}">Моя компания</a>
-                        </li>
-                    {% endif %}
                 {% endif %}
             </ul>
 
 
             {% if request.user.is_authenticated %}
                 <ul class="navbar-nav ms-auto">
+                    {% if request.user.workerprofile %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                Моя компания
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><a class="dropdown-item" href="{% url 'company:listsending' %}">Отправления вашей
+                                    компании</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company:listapplicationmanage' %}">Заявки
+                                    вашей компании</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'company:listworkers' %}">Работники вашей
+                                    компании</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company:listwarehouse' %}">Склады вашей
+                                    компании</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company:listtransport' %}">Транспорт вашей
+                                    компании</a></li>
+                            </ul>
+                        </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link"
                            href="{% url 'userprofile:profile' %}">{{ request.user.username }}

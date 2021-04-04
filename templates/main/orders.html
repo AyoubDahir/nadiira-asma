@@ -32,6 +32,26 @@
                 <p>Дата отправления: {{ order.departure_date }}</p>
                 <p>Сумма страхования: {{ order.insurance_price }} RUB</p>
                 <p>Дополнительная информация: {{ order.additional_info }} </p>
+                {% if order.application %}
+                    {% if order.application.status == 'CONF' %}
+                        <div class="alert alert-success" role="alert">
+                            Заявка к заказу подтверждена
+                        </div>
+                    {% elif order.application.status == 'DECL' %}
+                        <div class="alert alert-danger" role="alert">
+                            Заявка к заказу отклонена
+                        </div>
+                    {% elif order.application.status == 'WAIT' %}
+                        <div class="alert alert-warning" role="alert">
+                            Заявка к заказу ожидает подтверждения
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        Заявка к заказу не создана.
+                    </div>
+                {% endif %}
+
                 <p><a class="btn btn-primary" href="{% url 'main:ordersendings' order.pk %}">Посмотреть доступные
                     отправления</a>
                 <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Обновить заказ</a>
@@ -39,6 +59,35 @@
 
                 <hr>
             {% endfor %}
+
+            <ul class="pagination">
+
+
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">в начало</a></li>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                    </li>
+                {% endif %}
+
+                {% for page in paginator.page_range %}
+                    {% if page == page_obj.number %}
+                        <b class="page-link">{{ page }} </b>
+                    {% else %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                    {% endif %}
+
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                    <li class="page-item"><a class="page-link"
+                                             href="?page={{ page_obj.paginator.num_pages }}">в конец</a></li>
+                {% endif %}
+
+
+            </ul>
         </div>
     </div>
 {% endblock %}

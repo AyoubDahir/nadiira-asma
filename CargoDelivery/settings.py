@@ -125,6 +125,8 @@ SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
 
+PAGINATION_SIZE = 1
+
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOCALE_PATHS = ['locale', ]

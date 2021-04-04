@@ -4,10 +4,11 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 
-from CargoDelivery import celery
+from CargoDelivery import celery, settings
+from apps.company.models import Company
 
 from apps.main.forms import OrderForm, ApplicationForm
-from apps.main.models import Order, Sending, Application
+from apps.main.models import Order, Sending, Application, Warehouse, Transport
 
 
 class MainPageView(TemplateView):
@@ -21,11 +22,39 @@ class MainPageView(TemplateView):
         return context
 
 
+class CompanyList(ListView):
+    """
+    View for list all transport companies
+    """
+    model = Company
+    paginate_by = settings.PAGINATION_SIZE
+    template_name = 'company/../../templates/main/companies.html'
+
+
+class CompanyDetail(DetailView):
+    """
+    View for details of transport company
+    """
+    model = Company
+    template_name = 'company/../../templates/main/company_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['warehouses'] = Warehouse.objects.filter(company=self.object)
+        context['cars'] = Transport.objects.filter(company=self.object, transport_type='CAR')
+        context['trains'] = Transport.objects.filter(company=self.object, transport_type='TRAIN')
+        context['planes'] = Transport.objects.filter(company=self.object, transport_type='PLANE')
+        context['sendings'] = Sending.objects.filter(company=self.object)
+
+        return context
+
+
 class OrderList(LoginRequiredMixin, ListView):
     """
     View for list of all orders, created by user
     """
     model = Order
+    paginate_by = settings.PAGINATION_SIZE
 
     template_name = 'main/orders.html'
 
@@ -162,6 +191,7 @@ class ApplicationList(LoginRequiredMixin, ListView):
     (for users)
     """
     model = Application
+    paginate_by = settings.PAGINATION_SIZE
 
     template_name = 'main/applications.html'
 

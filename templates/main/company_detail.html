@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+
+{% block title %}{{ company.name }}{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <h2>
+                {{ company.name }}
+            </h2>
+            <p>{{ company.info }}</p>
+            <p><b>Склады компании:</b></p>
+
+            {% for warehouse in warehouses %}
+                <p>{{ warehouse.address }}. {{ warehouse.city }}</p>
+            {% endfor %}
+
+            <p><b>Транспорт компании:</b></p>
+            <p>Грузовики: {{ cars.count }}</p>
+            <p>Поезда: {{ trains.count }}</p>
+            <p>Самолёты: {{ planes.count }}</p>
+
+            <p><b>Количество отправлений: {{ sendings.count }}</b></p>
+        </div>
+    </div>
+{% endblock %}
