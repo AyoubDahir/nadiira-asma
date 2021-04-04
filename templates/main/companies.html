@@ -9,6 +9,7 @@
         <div class="row">
             {% for company in company_list %}
                 <h3>{{ company.name }}</h3>
+                <p>{{ company.info }}</p>
                 <p><a class="btn btn-primary" href="{% url 'main:company_detail' company.pk %}">Подробнее</a></p>
                 <hr>
             {% endfor %}

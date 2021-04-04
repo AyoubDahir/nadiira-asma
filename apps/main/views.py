@@ -8,7 +8,7 @@ from CargoDelivery import celery, settings
 from apps.company.models import Company
 
 from apps.main.forms import OrderForm, ApplicationForm
-from apps.main.models import Order, Sending, Application
+from apps.main.models import Order, Sending, Application, Warehouse, Transport
 
 
 class MainPageView(TemplateView):
@@ -37,6 +37,16 @@ class CompanyDetail(DetailView):
     """
     model = Company
     template_name = 'company/../../templates/main/company_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['warehouses'] = Warehouse.objects.filter(company=self.object)
+        context['cars'] = Transport.objects.filter(company=self.object, transport_type='CAR')
+        context['trains'] = Transport.objects.filter(company=self.object, transport_type='TRAIN')
+        context['planes'] = Transport.objects.filter(company=self.object, transport_type='PLANE')
+        context['sendings'] = Sending.objects.filter(company=self.object)
+
+        return context
 
 
 class OrderList(LoginRequiredMixin, ListView):
