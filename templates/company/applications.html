@@ -32,10 +32,11 @@
                         <p>{{ application.info }}</p>
                     </div>
                 {% endif %}
-                <a class="btn btn-success" href="{% url 'company:updateapplicationmanage' application.pk %}">Управлять
-                    заявкой</a>
+                <p><a class="btn btn- btn-success" href="{% url 'company:updateapplicationmanage' application.pk %}">Управлять
+                    заявкой</a></p>
                 <br>
                 <hr>
+                <br>
             {% endfor %}
         </div>
     </div>

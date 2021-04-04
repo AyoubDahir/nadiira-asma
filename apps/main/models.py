@@ -175,7 +175,7 @@ class Application(models.Model):
         """
         :return: calculated price, according to order volume and price of sending
         """
-        return float(self.order.cargo_volume) * float(self.sending.price_for_m3)
+        return round(float(self.order.cargo_volume) * float(self.sending.price_for_m3), 2)
 
     def __str__(self):
         return f'{self.get_status_display()}. {self.order}. {self.sending}'
