@@ -9,23 +9,6 @@ from apps.company.models import WorkerProfile, Company
 from apps.main.models import Warehouse, Transport, Sending, Application, Order
 
 
-class CompanyList(ListView):
-    """
-    View for list all transport companies
-    """
-    model = Company
-    paginate_by = settings.PAGINATION_SIZE
-    template_name = 'company/index.html'
-
-
-class CompanyDetail(DetailView):
-    """
-    View for details of transport company
-    """
-    model = Company
-    template_name = 'company/detail.html'
-
-
 class CreateWorkerProfile(LoginRequiredMixin, CreateView):
     """
     View for creation of transport company worker

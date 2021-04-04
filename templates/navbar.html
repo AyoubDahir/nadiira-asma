@@ -22,7 +22,7 @@
                     <li class="nav-item">
                         <a class="nav-link {% if page.title|lower in request.path %} active {% endif %}"
                            aria-current="page"
-                           href="{% url 'company:list' %}">Компании</a>
+                           href="{% url 'main:company_list' %}">Компании</a>
                     </li>
 
                     {% if request.user.workerprofile %}

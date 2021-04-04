@@ -5,6 +5,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 
 from CargoDelivery import celery, settings
+from apps.company.models import Company
 
 from apps.main.forms import OrderForm, ApplicationForm
 from apps.main.models import Order, Sending, Application
@@ -19,6 +20,23 @@ class MainPageView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context
+
+
+class CompanyList(ListView):
+    """
+    View for list all transport companies
+    """
+    model = Company
+    paginate_by = settings.PAGINATION_SIZE
+    template_name = 'company/../../templates/main/companies.html'
+
+
+class CompanyDetail(DetailView):
+    """
+    View for details of transport company
+    """
+    model = Company
+    template_name = 'company/../../templates/main/company_detail.html'
 
 
 class OrderList(LoginRequiredMixin, ListView):

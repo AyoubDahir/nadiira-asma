@@ -9,7 +9,7 @@
         <div class="row">
             {% for company in company_list %}
                 <h3>{{ company.name }}</h3>
-                <p><a class="btn btn-primary" href="{% url 'company:detail' company.pk %}">Подробнее</a></p>
+                <p><a class="btn btn-primary" href="{% url 'main:company_detail' company.pk %}">Подробнее</a></p>
                 <hr>
             {% endfor %}
             <ul class="pagination">

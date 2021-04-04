@@ -1,6 +1,6 @@
 from django.urls import path
 
-from apps.company.views import CreateWorkerProfile, CompanyList, CompanyDetail, WorkerProfileList, UpdateWorkerProfile, \
+from apps.company.views import CreateWorkerProfile, WorkerProfileList, UpdateWorkerProfile, \
     DeleteWorkerProfile, CompanyManagement, WarehouseList, CreateWarehouse, DeleteWarehouse, UpdateWarehouse, \
     CreateTransport, TransportList, UpdateTransport, DeleteTransport, CreateSending, SendingList, UpdateSending, \
     DeleteSending, ApplicationListManage, UpdateApplicationManage, OrderDetailManage
@@ -34,9 +34,5 @@ urlpatterns = [
     path('manage/orderdetail/<pk>/', OrderDetailManage.as_view(), name='detailordermanage'),
 
     path('manage/', CompanyManagement.as_view(), name='manage'),
-
-    path('<pk>/', CompanyDetail.as_view(), name='detail'),
-
-    path('', CompanyList.as_view(), name='list'),
 
 ]
