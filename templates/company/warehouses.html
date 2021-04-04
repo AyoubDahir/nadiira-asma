@@ -19,12 +19,41 @@
                             <br>
                             {{ warehouse.city.country }}
                             <br>
-                                <a class="btn btn-warning" href="{% url 'company:updatewarehouse' warehouse.pk %}">Редактировать</a>
-                                <a class="btn btn-danger" href="{% url 'company:deletewarehouse' warehouse.pk %}">Удалить</a>
+                            <a class="btn btn-warning" href="{% url 'company:updatewarehouse' warehouse.pk %}">Редактировать</a>
+                            <a class="btn btn-danger"
+                               href="{% url 'company:deletewarehouse' warehouse.pk %}">Удалить</a>
 
                             <br><br>
                         </li>
                     {% endfor %}
+                    <ul class="pagination">
+
+
+                        {% if page_obj.has_previous %}
+                            <li class="page-item"><a class="page-link" href="?page=1">в начало</a></li>
+                            <li class="page-item"><a class="page-link"
+                                                     href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+                            </li>
+                        {% endif %}
+
+                        {% for page in paginator.page_range %}
+                            {% if page == page_obj.number %}
+                                <b class="page-link">{{ page }} </b>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                            {% endif %}
+
+                        {% endfor %}
+
+                        {% if page_obj.has_next %}
+                            <li class="page-item"><a class="page-link"
+                                                     href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                            <li class="page-item"><a class="page-link"
+                                                     href="?page={{ page_obj.paginator.num_pages }}">в конец</a></li>
+                        {% endif %}
+
+
+                    </ul>
                 {% else %}
                     <p>У вас нет прав для просмотра данной страницы</p>
                 {% endif %}

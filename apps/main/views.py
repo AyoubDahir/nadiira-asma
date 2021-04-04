@@ -4,7 +4,7 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 
-from CargoDelivery import celery
+from CargoDelivery import celery, settings
 
 from apps.main.forms import OrderForm, ApplicationForm
 from apps.main.models import Order, Sending, Application
@@ -26,6 +26,7 @@ class OrderList(LoginRequiredMixin, ListView):
     View for list of all orders, created by user
     """
     model = Order
+    paginate_by = settings.PAGINATION_SIZE
 
     template_name = 'main/orders.html'
 
@@ -162,6 +163,7 @@ class ApplicationList(LoginRequiredMixin, ListView):
     (for users)
     """
     model = Application
+    paginate_by = settings.PAGINATION_SIZE
 
     template_name = 'main/applications.html'
 

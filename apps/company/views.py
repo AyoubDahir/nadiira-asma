@@ -3,6 +3,7 @@ from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
 
+from CargoDelivery import settings
 from apps.company.forms import WorkerProfileForm, WarehouseForm, TransportForm, SendingForm, ApplicationManageForm
 from apps.company.models import WorkerProfile, Company
 from apps.main.models import Warehouse, Transport, Sending, Application, Order
@@ -13,6 +14,7 @@ class CompanyList(ListView):
     View for list all transport companies
     """
     model = Company
+    paginate_by = settings.PAGINATION_SIZE
     template_name = 'company/index.html'
 
 
@@ -81,6 +83,7 @@ class WorkerProfileList(LoginRequiredMixin, ListView):
     View for list all companies workers
     """
     model = WorkerProfile
+    paginate_by = settings.PAGINATION_SIZE
     template_name = 'company/workers.html'
 
     def get_queryset(self):
@@ -108,6 +111,7 @@ class WarehouseList(LoginRequiredMixin, ListView):
     View for list all companies warehouses
     """
     model = Warehouse
+    paginate_by = settings.PAGINATION_SIZE
     template_name = 'company/warehouses.html'
 
     def get_queryset(self):
@@ -201,6 +205,7 @@ class TransportList(LoginRequiredMixin, ListView):
     View for list all companies transport
     """
     model = Transport
+    paginate_by = settings.PAGINATION_SIZE
     template_name = 'company/transports.html'
 
     def get_queryset(self):
@@ -324,6 +329,7 @@ class SendingList(LoginRequiredMixin, ListView):
     View for list all companies sendings
     """
     model = Sending
+    paginate_by = settings.PAGINATION_SIZE
     template_name = 'company/sendings.html'
 
     def get_queryset(self):
@@ -344,6 +350,7 @@ class ApplicationListManage(LoginRequiredMixin, ListView):
     View for list all application for that company
     """
     model = Application
+    paginate_by = settings.PAGINATION_SIZE
     template_name = 'company/applications.html'
 
     def get_queryset(self):
