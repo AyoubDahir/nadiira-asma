@@ -32,6 +32,26 @@
                 <p>Дата отправления: {{ order.departure_date }}</p>
                 <p>Сумма страхования: {{ order.insurance_price }} RUB</p>
                 <p>Дополнительная информация: {{ order.additional_info }} </p>
+                {% if order.application %}
+                    {% if order.application.status == 'CONF' %}
+                        <div class="alert alert-success" role="alert">
+                            Заявка к заказу подтверждена
+                        </div>
+                    {% elif order.application.status == 'DECL' %}
+                        <div class="alert alert-danger" role="alert">
+                            Заявка к заказу отклонена
+                        </div>
+                    {% elif order.application.status == 'WAIT' %}
+                        <div class="alert alert-warning" role="alert">
+                            Заявка к заказу ожидает подтверждения
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="alert alert-info" role="alert">
+                        Заявка к заказу не создана.
+                    </div>
+                {% endif %}
+
                 <p><a class="btn btn-primary" href="{% url 'main:ordersendings' order.pk %}">Посмотреть доступные
                     отправления</a>
                 <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Обновить заказ</a>

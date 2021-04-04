@@ -13,7 +13,9 @@
                     <a class="btn btn-success" href="{% url 'company:addsending' %}">Добавить отправление</a>
                     <br><br>
                     {% for sending in sending_list %}
-                        <li>Склад отправления: {{ sending.departure_warehouse }}
+                        <li>Отправление №{{ sending.id }}
+                            <br>
+                            Склад отправления: {{ sending.departure_warehouse }}
                             <br>
                             Дата отправления: {{ sending.departure_date }}
                             <br>
