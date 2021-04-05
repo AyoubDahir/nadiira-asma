@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,10 +33,10 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'phonenumber_field',
     'crispy_forms',
     'mathfilters',
     'debug_toolbar',
+    'rest_framework',
 
     'apps.main',
     'apps.userprofile',
@@ -177,5 +178,10 @@ ACCOUNT_EMAIL_VERIFICATION = 'optional'
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}
 
 # celery -A CargoDelivery worker -l INFO -P gevent

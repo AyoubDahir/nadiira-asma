@@ -1,0 +1,24 @@
+##############################################
+        userprofile:
+
+Profile
+GET - только для владельца профиля (request.user==Profile.user)
+PUT - только для владельца профиля (request.user==Profile.user)
+
+##############################################
+        company:
+
+Company
+WorkerProfile
+
+##############################################
+        main:
+
+Country - не трогать
+City - не трогать
+
+Warehouse
+Order
+Transport
+Sending
+Application

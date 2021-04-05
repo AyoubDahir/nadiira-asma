@@ -24,7 +24,6 @@ class OrderCreationForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         if user := kwargs.pop('user'):
             super(OrderCreationForm, self).__init__(*args, **kwargs)
-            print(user)
             self.fields['sender_fullname'].initial = user.last_name + ' ' + user.first_name
 
     class Meta:

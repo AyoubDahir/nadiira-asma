@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import phonenumber_field.modelfields
+
 
 
 class Migration(migrations.Migration):
@@ -14,11 +14,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='profile',
-            name='phone',
-            field=phonenumber_field.modelfields.PhoneNumberField(blank=True, max_length=128, region=None, verbose_name='Номер телефона'),
-        ),
+
         migrations.AlterField(
             model_name='profile',
             name='user',
