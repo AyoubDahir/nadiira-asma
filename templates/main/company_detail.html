@@ -10,7 +10,9 @@
             <h2>
                 {{ company.name }}
             </h2>
-            <p>{{ company.info }}</p>
+            <p><b>Информация:</b> {{ company.info }}</p>
+            <p><b>Телефон:</b> {{ company.phone }}</p>
+            <p><b>Email:</b> <a href="mailto:{{ company.email }}">{{ company.email }}</a></p>
             <p><b>Склады компании:</b></p>
 
             {% for warehouse in warehouses %}
