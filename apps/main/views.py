@@ -1,13 +1,13 @@
 import datetime
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DeleteView, DetailView
 
-from CargoDelivery import celery, settings
+from CargoDelivery import settings
 from apps.company.models import Company
-
-from apps.main.forms import OrderForm, ApplicationForm
+from apps.main.forms import OrderForm, ApplicationForm, OrderCreationForm
 from apps.main.models import Order, Sending, Application, Warehouse, Transport
 
 
@@ -78,9 +78,14 @@ class CreateOrder(LoginRequiredMixin, CreateView):
     """
     model = Order
     template_name = 'main/forms/create_form.html'
-    form_class = OrderForm
+    form_class = OrderCreationForm
     login_url = 'login/'
     success_url = reverse_lazy('main:orders')
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateOrder, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         """
