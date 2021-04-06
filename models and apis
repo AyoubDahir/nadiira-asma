@@ -8,8 +8,8 @@ PUT - только для владельца профиля (request.user==Profi
 ##############################################
         company:
 
-Company
-WorkerProfile
+Company - только для группы owner
+WorkerProfile - только для группы owner
 
 ##############################################
         main:
@@ -17,8 +17,16 @@ WorkerProfile
 Country - не трогать
 City - не трогать
 
-Warehouse
-Order
-Transport
-Sending
-Application
+Warehouse - только для группы owner и поле компании предзаполнено
+Условие для всех: Имеет request.user.workerprofile
+GET - Фильтрация company__workerprofile__user=self.request.user и имеет request.user.workerprofile
+POST - Подставить компанию workerprofile__user=self.request.user и имеет request.user.workerprofile
+PUT - Подставить компанию workerprofile__user=self.request.user и проверить request.user.workerprofile.company == object.company
+DELETE - Проверить request.user.workerprofile.company == object.company
+
+
+Transport -
+Sending -
+
+Order -
+Application -

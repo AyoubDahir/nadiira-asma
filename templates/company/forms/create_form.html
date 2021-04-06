@@ -10,8 +10,7 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user|has_group:"owner"%}
-
+            {% if request.user.workerprofile %}
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>

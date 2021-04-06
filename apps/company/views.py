@@ -15,7 +15,7 @@ class CreateWorkerProfile(LoginRequiredMixin, CreateView):
     (only users with owner accounts can make this)
     """
     model = WorkerProfile
-    template_name = 'company/forms/create_form.html'
+    template_name = 'company/forms/create_workerprofile_form.html'
     form_class = WorkerProfileForm
     login_url = 'login/'
     success_url = reverse_lazy('company:listworkers')
@@ -36,7 +36,7 @@ class UpdateWorkerProfile(LoginRequiredMixin, UpdateView):
     (only users with owner accounts can make this)
     """
     model = WorkerProfile
-    template_name = 'company/forms/update_form.html'
+    template_name = 'company/forms/update_workerprofile_form.html'
     form_class = WorkerProfileForm
     login_url = 'login/'
     success_url = reverse_lazy('company:listworkers')
@@ -57,7 +57,7 @@ class DeleteWorkerProfile(LoginRequiredMixin, DeleteView):
     (only users with owner accounts can make this)
     """
     model = WorkerProfile
-    template_name = 'company/forms/delete_form.html'
+    template_name = 'company/forms/delete_workerprofile_form.html'
     success_url = reverse_lazy('company:listworkers')
 
 
@@ -235,7 +235,7 @@ class CreateSending(LoginRequiredMixin, CreateView):
 
     """
     model = Sending
-    template_name = 'company/forms/create_sending_form.html'
+    template_name = 'company/forms/create_form.html'
     form_class = SendingForm
     login_url = 'login/'
     success_url = reverse_lazy('company:listsending')
@@ -266,7 +266,7 @@ class UpdateSending(LoginRequiredMixin, UpdateView):
 
     """
     model = Sending
-    template_name = 'company/forms/update_sending_form.html'
+    template_name = 'company/forms/update_form.html'
     form_class = SendingForm
     login_url = 'login/'
     success_url = reverse_lazy('company:listsending')

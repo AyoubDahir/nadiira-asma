@@ -10,7 +10,7 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user|has_group:"owner" and request.user.workerprofile.company == object.company %}
+            {% if request.user.workerprofile.company == object.company %}
                 <p>Вы действительно хотите удалить склад
                      <b>{{ warehouse.address }} в {{ warehouse.city }} ({{ warehouse.city.country }})</b>?</p>
                 <form method="post">{% csrf_token %}
