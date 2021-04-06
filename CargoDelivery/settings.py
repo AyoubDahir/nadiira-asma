@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -32,10 +33,10 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
-    'phonenumber_field',
     'crispy_forms',
     'mathfilters',
     'debug_toolbar',
+    'rest_framework',
 
     'apps.main',
     'apps.userprofile',
@@ -121,6 +122,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
+
 SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
@@ -133,7 +138,7 @@ LOCALE_PATHS = ['locale', ]
 
 LANGUAGE_CODE = 'ru'
 
-#CACHES = {
+# CACHES = {
 #    "default": {
 #        "BACKEND": "django_redis.cache.RedisCache",
 #       "LOCATION": "redis://127.0.0.1:6379/1",
@@ -142,7 +147,7 @@ LANGUAGE_CODE = 'ru'
 #        },
 #        "KEY_PREFIX": "example"
 #    }
-#}
+# }
 
 INTERNAL_IPS = [
     '127.0.0.1',
@@ -168,10 +173,15 @@ SITE_URL = 'http://127.0.0.1:8000'
 
 ACCOUNT_EMAIL_REQUIRED = True
 
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
 
 ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [],
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+}
 
 # celery -A CargoDelivery worker -l INFO -P gevent

@@ -16,6 +16,7 @@
                 <p> Стоимость: {{ application.price }} руб.</p>
                 <p>Email заказчика: <a
                         href="mailto:{{ application.order.user.email }}">{{ application.order.user.email }} </a></p>
+                <p>Телефон заказчика: {{ application.order.user.profile.phone }} </p>
                 {% if application.status == 'WAIT' %}
                     <div class="alert alert-warning" role="alert">
                         <p>Статус: {{ application.get_status_display }}</p>

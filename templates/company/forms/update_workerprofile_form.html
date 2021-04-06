@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
-{% load crispy_forms_filters %}
 {% load auth_extras %}
+{% load crispy_forms_filters %}
 
-{% block title %}Добавить отправление{% endblock %}
+{% block title %}Редактировать{% endblock %}
 
 {% block content %}
     <br>
@@ -10,12 +10,11 @@
         <div class="row">
             <br>
             <br>
-            {% if request.user.workerprofile %}
-
+            {% if request.user.workerprofile.company == object.company %}
                 <form method="post">{% csrf_token %}
                     {{ form|crispy }}
                     <br>
-                    <input class="btn btn-success" type="submit" value="Создать">
+                    <input type="submit" class="btn btn-warning" value="Редактировать">
                 </form>
             {% else %}
                 <p>У вас нет прав для этого действия</p>

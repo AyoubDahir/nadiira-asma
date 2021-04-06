@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('company', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('userprofile', '0003_profile_phone'),
+        ('userprofile', '0002_remove_profile_birth_date'),
     ]
 
     operations = [

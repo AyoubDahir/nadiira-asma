@@ -1,0 +1,27 @@
+.landing {
+    margin: 0;
+    padding: 0;
+}
+
+.start-img-container {
+    position: relative;
+}
+
+.start-img {
+    margin: 0;
+    width: 100%;
+    border: 0;
+    border-radius: 0;
+    filter: brightness(50%);
+}
+
+h1 {
+    position: absolute;
+    top: 80%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+
+}
