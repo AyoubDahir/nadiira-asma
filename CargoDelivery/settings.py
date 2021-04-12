@@ -33,10 +33,10 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'crispy_forms',
     'mathfilters',
     'debug_toolbar',
-    'rest_framework',
 
     'apps.main',
     'apps.userprofile',
@@ -179,9 +179,25 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [],
-    'TEST_REQUEST_DEFAULT_FORMAT': 'json'
+SOCIALACCOUNT_PROVIDERS = {
+    "google": {
+        "APP": {
+            "client_id": os.getenv('GOOGLE_CLIENT_ID'),
+            "secret": os.getenv('GOOGLE_SECRET'),
+        },
+        "SCOPE": [
+            "profile",
+            "email",
+        ],
+        "AUTH_PARAMS": {
+            "access_type": "online",
+        }
+    }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend'
+]
 
 # celery -A CargoDelivery worker -l INFO -P gevent
