@@ -5,21 +5,13 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv("SECRET_KEY")
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -77,18 +69,36 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CargoDelivery.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
 DATABASES = {
+
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+
+        'NAME': os.getenv('DB_NAME'),
+
+        'USER': os.getenv('DB_USERNAME'),
+
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+
+        'HOST': os.getenv('DB_SERVER_NAME'),
+
+        'PORT': os.getenv('DB_PORT'),
+
     }
+
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+#         'NAME': 'db.sqlite3',  # Or path to database file if using sqlite3.
+#         'USER': '',  # Not used with sqlite3.
+#         'PASSWORD': '',  # Not used with sqlite3.
+#         'HOST': '',  # Set to empty string for localhost. Not used with sqlite3.
+#         'PORT': '',  # Set to empty string for default. Not used with sqlite3.
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -105,10 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
-# https://docs.djangoproject.com/en/3.1/topics/i18n/
-
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -116,9 +122,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
@@ -130,24 +133,13 @@ SITE_ID = 1
 
 LOGIN_REDIRECT_URL = '/'
 
-PAGINATION_SIZE = 1
+PAGINATION_SIZE = 3
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 LOCALE_PATHS = ['locale', ]
 
 LANGUAGE_CODE = 'ru'
-
-# CACHES = {
-#    "default": {
-#        "BACKEND": "django_redis.cache.RedisCache",
-#       "LOCATION": "redis://127.0.0.1:6379/1",
-#        "OPTIONS": {
-#            "CLIENT_CLASS": "django_redis.client.DefaultClient"
-#        },
-#        "KEY_PREFIX": "example"
-#    }
-# }
 
 INTERNAL_IPS = [
     '127.0.0.1',

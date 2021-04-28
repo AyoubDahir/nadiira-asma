@@ -9,95 +9,227 @@
     <div class="container">
         <div class="row">
             {% if request.user == object.user %}
+
                 <h3>Заказ {{ order.pk }}</h3>
-                <p>Из: {{ order.departure_city }}</p>
-                <p>Отправитель: {{ order.sender_fullname }}</p>
-                <p>В: {{ order.arrival_city }}</p>
-                <p>Получатель:{{ order.recipient_fullname }}</p>
-                <p>Тип груза: {{ order.get_cargo_type_display }}</p>
-                <p>Размеры: {{ order.cargo_len }}см x {{ order.cargo_width }}см x {{ order.cargo_depth }}см
-                    ({{ order.cargo_volume }} м<sup>3</sup>)</p>
-                {% if order.direct_take %}
-                    <p>Забрать из: {{ order.direct_take_address }}</p>
-                {% else %}
-                    <p>Не забирать от отправителя</p>
-                {% endif %}
-                {% if order.direct_deliver %}
-                    <p>Доставить в: {{ order.direct_deliver_address }}</p>
-                {% else %}
-                    <p>Не доставлять получателю</p>
-                {% endif %}
-                <p>Дата отправления: {{ order.departure_date }}</p>
-                <p>Сумма страхования: {{ order.insurance_price }} RUB</p>
-                <p>Дополнительная информация: {{ order.additional_info }} </p>
+                <p><b>Дата отправления:</b> {{ order.departure_date }}</p>
+                <hr>
+                <div class="col-1">
+                    <p><span class="material-icons">location_city</span></p>
+                    <p><span class="material-icons">face</span></p>
+                    <p><span class="material-icons">logout</span></p>
+                </div>
+                <div class="col-5">
+                    <p><b>Город
+                        отправления:</b> {{ order.departure_city }}</p>
+                    <p><b>Отправитель:</b> {{ order.sender_fullname }}</p>
+                    {% if order.direct_take %}
+                        <p><b>Забрать из:</b> {{ order.direct_take_address }}</p>
+                    {% else %}
+                        <p><b>Не забирать от отправителя</b></p>
+                    {% endif %}
+                </div>
+                <div class="col-1">
+                    <p><span class="material-icons">arrow_forward</span></p>
+                    <p><span class="material-icons">arrow_forward</span></p>
+                </div>
+
+                <div class="col-5">
+                    <p><b>Город получения:</b> {{ order.arrival_city }}</p>
+                    <p><b>Получатель:</b> {{ order.recipient_fullname }}</p>
+                    {% if order.direct_deliver %}
+                        <p><b>Доставить в:</b> {{ order.direct_deliver_address }}</p>
+                    {% else %}
+                        <p><b>Не доставлять получателю</b></p>
+                    {% endif %}
+                </div>
+                <hr>
+                <div class="col-1">
+                    <span class="material-icons">view_in_ar</span>
+                </div>
+                <div class="col-11">
+                    <p><b>Тип груза:</b> {{ order.get_cargo_type_display }}</p>
+                    <p><b>Размеры:</b> {{ order.cargo_len }}см x {{ order.cargo_width }}см
+                        x {{ order.cargo_depth }}см
+                        ({{ order.cargo_volume }} м<sup>3</sup>)</p>
+                </div>
+                <hr>
+
+                <div class="col-1"><span class="material-icons">attach_money</span></div>
+                <div class="col-11">
+                    <p><b>Сумма страхования:</b> {{ order.insurance_price }} RUB</p>
+                </div>
+                <div class="col-1"><span class="material-icons">info</span></div>
+                <div class="col-11">
+                    <p><b>Дополнительная информация:</b> {{ order.additional_info }} </p>
+                </div>
 
                 <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Обновить заказ</a>
                     <a class="btn btn-danger" href="{% url 'main:deleteorder' order.pk %}">Удалить заказ</a></p>
-                <hr>
+
+
                 {% if not application %}
-                    <h4>Доступные отправления на вашу дату:</h4>
-                    <ol>
-                        {% for sending in sendings %}
-                            {% if sending.free_volume > order.cargo_volume %}
-                                <li><b>{{ sending.company }}</b>
-                                    <br>
-                                    Дата отправления: {{ sending.departure_date }}
-                                    <br>
-                                    Дата доставки: {{ sending.arrival_date }}
-                                    <br>
-                                    Склад отправления: {{ sending.departure_warehouse }}
-                                    <br>
-                                    Склад получения: {{ sending.arrival_warehouse }}
-                                    <br>
-                                    {{ sending.transport.get_transport_type_display }}
-                                    <br>
-                                    Свободное место: {{ sending.free_volume }} м<sup>3</sup>
-                                    <br>
-                                    Стоимость: {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }} руб.
-                                    <br>
+                    <h4 class="text-center">Доступные отправления на вашу дату:</h4>
+
+                    {% for sending in sendings %}
+                        {% if sending.free_volume > order.cargo_volume %}
+                            <div class="card order-card">
+                                <div class="row card-body">
+                                    <div class="col-1">
+                                        <p><span class="material-icons">business</span></p>
+                                    </div>
+                                    <div class="col-11">
+                                        <p><b>Компания: </b>{{ sending.company }}</p>
+                                    </div>
+                                    <hr>
+                                    <div class="col-1">
+                                        <p><span class="material-icons">event</span></p>
+                                        <p><span class="material-icons">store</span></p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p><b>Дата отправления: </b>{{ sending.departure_date }}</p>
+                                        <p><b>Склад отправления: </b>{{ sending.departure_warehouse }}</p>
+
+                                    </div>
+                                    <div class="col-1">
+                                        <p><span class="material-icons">arrow_forward</span></p>
+                                        <p><span class="material-icons">arrow_forward</span></p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p><b>Дата доставки: </b>{{ sending.arrival_date }}</p>
+                                        <p><b>Склад получения: </b>{{ sending.arrival_warehouse }}</p>
+                                    </div>
+                                    <hr>
+                                    <div class="col-1">
+                                        <p><span class="material-icons">local_shipping</span></p>
+                                        <p><span class="material-icons">view_in_ar</span></p>
+                                    </div>
+                                    <div class="col-11">
+                                        <p><b>Транспорт: </b>{{ sending.transport.get_transport_type_display }}</p>
+
+                                        <p><b>Свободное место: </b>{{ sending.free_volume }} м<sup>3</sup></p>
+                                    </div>
+                                    <hr>
+                                    <div class="col-1">
+                                        <p><span class="material-icons">schedule</span></p>
+                                        <p><span class="material-icons">attach_money</span></p>
+                                    </div>
+                                    <div class="col-11">
+                                        <p><b>Продолжительность доставки: </b>{{ sending.days }}</p>
+                                        <p>
+                                            <b>Стоимость: </b>{{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }}
+                                            руб.</p>
+                                    </div>
                                     <a class="btn btn-success"
                                        href="{% url 'main:addaplication' order.pk sending.pk %}">Выбрать
                                         отправление</a>
-                                    <br><br>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ol>
-                    <h4>Доступные отправления на ближайшие дни:</h4>
-                    <ol>
-                        {% for sending in near_sendings %}
-                            {% if sending.free_volume > order.cargo_volume %}
-                                <li><b>{{ sending.company }}</b>
-                                    <br>
-                                    Дата отправления: {{ sending.departure_date }}
-                                    <br>
-                                    Дата доставки: {{ sending.arrival_date }}
-                                    <br>
-                                    Склад отправления: {{ sending.departure_warehouse }}
-                                    <br>
-                                    Склад получения: {{ sending.arrival_warehouse }}
-                                    <br>
-                                    {{ sending.transport.get_transport_type_display }}
-                                    <br>
-                                    Свободное место: {{ sending.free_volume }} м<sup>3</sup>
-                                    <br>
-                                    Стоимость {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }} руб.
-                                    <br>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                    {% endfor %}
+
+                    <h4 class="text-center">Доступные отправления на ближайшие дни:</h4>
+
+                    {% for sending in near_sendings %}
+                        {% if sending.free_volume > order.cargo_volume %}
+                            <div class="card order-card">
+                                <div class="row card-body">
+                                    <div class="col-1">
+                                        <p><span class="material-icons">business</span></p>
+                                    </div>
+                                    <div class="col-11">
+                                        <p><b>Компания: </b>{{ sending.company }}</p>
+                                    </div>
+                                    <hr>
+                                    <div class="col-1">
+                                        <p><span class="material-icons">event</span></p>
+                                        <p><span class="material-icons">store</span></p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p><b>Дата отправления: </b>{{ sending.departure_date }}</p>
+                                        <p><b>Склад отправления: </b>{{ sending.departure_warehouse }}</p>
+
+                                    </div>
+                                    <div class="col-1">
+                                        <p><span class="material-icons">arrow_forward</span></p>
+                                        <p><span class="material-icons">arrow_forward</span></p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p><b>Дата доставки: </b>{{ sending.arrival_date }}</p>
+                                        <p><b>Склад получения: </b>{{ sending.arrival_warehouse }}</p>
+                                    </div>
+                                    <hr>
+                                    <div class="col-1">
+                                        <p><span class="material-icons">local_shipping</span></p>
+                                        <p><span class="material-icons">view_in_ar</span></p>
+                                    </div>
+                                    <div class="col-11">
+                                        <p><b>Транспорт: </b>{{ sending.transport.get_transport_type_display }}</p>
+
+                                        <p><b>Свободное место: </b>{{ sending.free_volume }} м<sup>3</sup></p>
+                                    </div>
+                                    <hr>
+                                    <div class="col-1">
+                                        <p><span class="material-icons">schedule</span></p>
+                                        <p><span class="material-icons">attach_money</span></p>
+                                    </div>
+                                    <div class="col-11">
+                                        <p><b>Продолжительность доставки: </b>{{ sending.days }}</p>
+                                        <p>
+                                            <b>Стоимость: </b>{{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }}
+                                            руб.</p>
+                                    </div>
                                     <a class="btn btn-success"
                                        href="{% url 'main:addaplication' order.pk sending.pk %}">Выбрать
                                         отправление</a>
-                                </li>
-                            {% endif %}
-                        {% endfor %}
-                    </ol>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
                 {% else %}
-                    <h5>У вас уже есть заявка на данный заказ</h5>
-                    <br>
-                    <p>{{ application.sending }}</p>
-                    <p>{{ application.get_status_display }}</p>
-                    <p>Стоимость: {{ application.price }} руб.</p>
-                    <p><a class="btn btn-danger" href="{% url 'main:deleteapplication' application.pk %}">Удалить
-                        заявку</a></p>
+                    <div class="card order-card">
+                        <div class="row card-body">
+                            <h5>У вас уже есть заявка на данный заказ</h5>
+                            <div class="col-1">
+                                <p><span class="material-icons">business</span></p>
+                            </div>
+                            <div class="col-11">
+                                <p><b>Компания: </b>{{ application.sending.company }}</p>
+                            </div>
+                            <hr>
+                            <div class="col-1">
+                                <p><span class="material-icons">schedule</span></p>
+                            </div>
+                            <div class="col-5"><p><b>Дата отправления: </b>{{ application.sending.departure_date }}</p>
+                            </div>
+                            <div class="col-1">
+                                <p><span class="material-icons">arrow_forward</span></p>
+                            </div>
+                            <div class="col-5"><p><b>Дата прибытия: </b>{{ application.sending.arrival_date }}</p></div>
+                            <hr>
+                            <div class="col-1">
+                                <p><span class="material-icons">check</span></p>
+                                <p><span class="material-icons">attach_money</span></p>
+                            </div>
+
+                            <div class="col-5">
+                                <p><b>Статус: </b><span
+                                        class="badge
+                                    {% if order.application.status == 'CONF' %}
+                                        bg-success
+                                    {% elif order.application.status == 'DECL' %}
+                                        bg-warning
+                                    {% elif order.application.status == 'WAIT' %}
+                                        bg-danger
+                                    {% endif %}
+                                ">{{ application.get_status_display }}</span>
+
+                                <p><b>Стоимость: </b>{{ application.price }} руб.</p>
+                            </div>
+                            <p><a class="btn btn-danger" href="{% url 'main:deleteapplication' application.pk %}">Удалить
+                                заявку</a></p>
+                        </div>
+                    </div>
                 {% endif %}
             {% else %}
                 <p>Вы не можете просматривать данную информацию</p>

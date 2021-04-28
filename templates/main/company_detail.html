@@ -10,21 +10,53 @@
             <h2>
                 {{ company.name }}
             </h2>
-            <p><b>Информация:</b> {{ company.info }}</p>
-            <p><b>Телефон:</b> {{ company.phone }}</p>
-            <p><b>Email:</b> <a href="mailto:{{ company.email }}">{{ company.email }}</a></p>
-            <p><b>Склады компании:</b></p>
+            <div class="col-1">
+                <p><span class="material-icons">call</span></p>
+                <p><span class="material-icons">email</span></p>
+                <p><span class="material-icons">info</span></p>
+            </div>
+            <div class="col-11">
+                <p><b>Телефон:</b> {{ company.phone }}</p>
+                <p><b>Email:</b> <a href="mailto:{{ company.email }}">{{ company.email }}</a></p>
+                <p><b>О компании: </b>{{ company.info }}</p>
+            </div>
+            <h5 class="text-center"><b>Склады компании:</b></h5>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Склад</th>
+                    <th scope="col">Город</th>
+                    <th scope="col">Страна</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for warehouse in warehouses %}
+                    <tr>
+                        <td>{{ warehouse.address }}</td>
+                        <td>{{ warehouse.city }}</td>
+                        <td>{{ warehouse.city.country }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-            {% for warehouse in warehouses %}
-                <p>{{ warehouse.address }}. {{ warehouse.city }}</p>
-            {% endfor %}
 
-            <p><b>Транспорт компании:</b></p>
-            <p>Грузовики: {{ cars.count }}</p>
-            <p>Поезда: {{ trains.count }}</p>
-            <p>Самолёты: {{ planes.count }}</p>
-
-            <p><b>Количество отправлений: {{ sendings.count }}</b></p>
+            <h5 class="text-center"><b>Транспорт компании:</b></h5>
+            <div class="col-1">
+                <p><span class="material-icons">local_shipping</span></p>
+                <p><span class="material-icons">train</span></p>
+                <p><span class="material-icons">flight</span></p>
+                <p><span class="material-icons">directions_boat</span></p>
+            </div>
+            <div class="col-11">
+                <p>Грузовики: <span class="badge text-dark bg-light">{{ cars.count }}</span></p>
+                <p>Поезда: <span class="badge text-dark bg-light">{{ trains.count }}</span></p>
+                <p>Самолёты: <span class="badge text-dark bg-light">{{ planes.count }}</span></p>
+                <p>Корабли: <span class="badge text-dark bg-light">{{ ships.count }}</span></p>
+            </div>
+            <h5><b>Количество текущих отправлений: </b><span
+                    class="badge rounded-pill bg-primary">{{ sendings.count }}</span>
+            </h5>
         </div>
     </div>
 {% endblock %}

@@ -105,6 +105,7 @@ class Transport(models.Model):
         ('CAR', 'Грузовик'),
         ('TRAIN', 'Поезд'),
         ('PLANE', 'Самолёт'),
+        ('SHIP', 'Корабль'),
     )
     transport_type = models.CharField(max_length=5, choices=TRANSPORT_TYPE_SET, verbose_name='Тип транспорта')
     number = models.CharField(max_length=20, blank=True, verbose_name='Номер транспорта')
@@ -145,6 +146,21 @@ class Sending(models.Model):
         """
         summ = sum([order.cargo_volume for order in self.orders.all()])
         return self.total_volume - round(summ, 2)
+
+    @property
+    def days(self):
+        """
+        Calculate number of days between departure and arrival
+        """
+        days_list = ['день', 'дня', 'дней']
+        num_days = (self.arrival_date - self.departure_date).days
+        if num_days % 10 == 1 and num_days % 100 != 11:
+            p = 0
+        elif 2 <= num_days % 10 <= 4 and (num_days % 100 < 10 or num_days % 100 >= 20):
+            p = 1
+        else:
+            p = 2
+        return f'{num_days} {days_list[p]}'
 
     def __str__(self):
         return f'Отправление №{self.id}. {self.company}. {self.departure_warehouse} -> {self.arrival_warehouse}.' \
