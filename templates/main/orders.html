@@ -9,11 +9,19 @@
         <div class="row">
             <p><a class="btn btn-success" href="{% url 'main:addorder' %}">Добавить заказ</a></p>
             {% for order in order_list %}
-
                 <div class="card order-card">
+                    <div class="card-header">
+                        <h4>Заказ №{{ order.pk }}</h4>
+                    </div>
                     <div class="row card-body">
-                        <h3>Заказ {{ order.pk }}</h3>
-                        <p><b>Дата отправления:</b> {{ order.departure_date }}</p>
+
+                        <div class="col-1">
+                            <p><span class="material-icons">event</span></p>
+                        </div>
+                        <div class="col-11">
+                            <p><b>Дата отправления:</b> {{ order.departure_date }}</p>
+                        </div>
+
                         <hr>
                         <div class="col-1">
                             <p><span class="material-icons">location_city</span></p>
@@ -84,9 +92,8 @@
                             </div>
                         {% endif %}
 
-                        <p><a class="btn btn-outline-primary" href="{% url 'main:ordersendings' order.pk %}">Посмотреть
-                            доступные
-                            отправления</a>
+                        <p><a class="btn btn-outline-primary" href="{% url 'main:ordersendings' order.pk %}"><b>Посмотреть
+                            доступные отправления</b></a>
                         <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Обновить заказ</a>
                             <a class="btn btn-danger" href="{% url 'main:deleteorder' order.pk %}">Удалить заказ</a></p>
 

@@ -105,6 +105,7 @@ class Transport(models.Model):
         ('CAR', 'Грузовик'),
         ('TRAIN', 'Поезд'),
         ('PLANE', 'Самолёт'),
+        ('SHIP', 'Корабль'),
     )
     transport_type = models.CharField(max_length=5, choices=TRANSPORT_TYPE_SET, verbose_name='Тип транспорта')
     number = models.CharField(max_length=20, blank=True, verbose_name='Номер транспорта')

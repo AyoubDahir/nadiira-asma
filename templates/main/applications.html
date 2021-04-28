@@ -7,33 +7,58 @@
     <br>
     <div class="container">
         <div class="row">
-            <h3>Ваши заявки</h3>
-            <hr>
             {% for application in application_list %}
-                <br>
-                <p>{{ application.order }}</p>
-                <p>{{ application.sending }}</p>
-                <p> Стоимость: {{ application.price }} руб.</p>
-                {% if application.status == 'WAIT' %}
-                    <div class="alert alert-warning" role="alert">
-                        <p>{{ application.get_status_display }}</p>
-                        <p>{{ application.info }}</p>
+                <div class="card order-card">
+                    <div class="card-header">
+                        <h4>Заявка №{{ application.pk }}</h4>
                     </div>
-                {% elif application.status == 'CONF' %}
-                    <div class="alert alert-success" role="alert">
-                        <p>{{ application.get_status_display }}</p>
-                        <p>{{ application.info }}</p>
-                    </div>
-                {% elif application.status == 'DECL' %}
-                    <div class="alert alert-danger" role="alert">
-                        <p>{{ application.get_status_display }}</p>
-                        <p>{{ application.info }}</p>
-                    </div>
-                {% endif %}
+                    <div class="row card-body">
+                        <div class="col-1">
+                            <p><span class="material-icons">business</span></p>
+                        </div>
+                        <div class="col-11">
+                            <p><b>Компания: </b>{{ application.sending.company }}</p>
+                        </div>
+                        <hr>
+                        <div class="col-1">
+                            <p><span class="material-icons">schedule</span></p>
+                        </div>
+                        <div class="col-5"><p><b>Дата отправления: </b>{{ application.sending.departure_date }}</p>
+                        </div>
+                        <div class="col-1">
+                            <p><span class="material-icons">arrow_forward</span></p>
+                        </div>
+                        <div class="col-5"><p><b>Дата прибытия: </b>{{ application.sending.arrival_date }}</p></div>
+                        <hr>
+                        <div class="col-1">
+                            <p><span class="material-icons">check</span></p>
+                            <p><span class="material-icons">attach_money</span></p>
+                        </div>
 
-                <p><a class="btn btn-primary" href="{% url 'main:ordersendings' application.order.pk %}">Перейти к
-                    заказу</a></p>
-                <hr>
+                        <div class="col-5">
+                            <p><b>Статус: </b><span
+                                    class="badge
+                                    {% if application.status == 'CONF' %}
+                                        bg-success
+                                    {% elif application.status == 'DECL' %}
+                                        bg-danger
+                                    {% elif application.status == 'WAIT' %}
+                                        bg-warning
+                                    {% endif %}
+                                ">{{ application.get_status_display }}</span>
+
+                            <p><b>Стоимость: </b>{{ application.price }} руб.</p>
+                        </div>
+                        <hr>
+                        <p><a class="btn btn-outline-primary"
+                              href="{% url 'main:ordersendings' application.order.pk %}"><b>Перейти
+                            к заказу</b></a>
+                            <a class="btn btn-outline-danger"
+                               href="{% url 'main:deleteapplication' application.pk %}"><b>Удалить
+                                заявку</b></a>
+                        </p>
+                    </div>
+                </div>
             {% endfor %}
             <ul class="pagination">
 

@@ -44,6 +44,7 @@ class CompanyDetail(DetailView):
         context['cars'] = Transport.objects.filter(company=self.object, transport_type='CAR')
         context['trains'] = Transport.objects.filter(company=self.object, transport_type='TRAIN')
         context['planes'] = Transport.objects.filter(company=self.object, transport_type='PLANE')
+        context['ships'] = Transport.objects.filter(company=self.object, transport_type='SHIP')
         context['sendings'] = Sending.objects.filter(company=self.object)
 
         return context

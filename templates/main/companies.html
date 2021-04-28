@@ -8,10 +8,26 @@
     <div class="container">
         <div class="row">
             {% for company in company_list %}
-                <h3>{{ company.name }}</h3>
-                <p>{{ company.info }}</p>
-                <p><a class="btn btn-primary" href="{% url 'main:company_detail' company.pk %}">Подробнее</a></p>
-                <hr>
+                <div class="card order-card">
+                    <div class="card-header">
+                        <h3>{{ company.name }}</h3>
+                    </div>
+                    <div class="row card-body">
+                        <div class="col-1">
+                            <p><span class="material-icons">call</span></p>
+                            <p><span class="material-icons">email</span></p>
+                            <p><span class="material-icons">info</span></p>
+                        </div>
+                        <div class="col-11">
+                            <p><b>Телефон:</b> {{ company.phone }}</p>
+                            <p><b>Email:</b> <a href="mailto:{{ company.email }}">{{ company.email }}</a></p>
+                            <p><b>О компании: </b>{{ company.info }}</p>
+                        </div>
+                        <p><a class="btn btn-outline-primary" href="{% url 'main:company_detail' company.pk %}">Информация
+                            о складах и транспорте</a>
+                        </p>
+                    </div>
+                </div>
             {% endfor %}
             <ul class="pagination">
 
