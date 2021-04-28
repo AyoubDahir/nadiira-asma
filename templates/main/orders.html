@@ -7,57 +7,92 @@
     <br>
     <div class="container">
         <div class="row">
-
             <p><a class="btn btn-success" href="{% url 'main:addorder' %}">Добавить заказ</a></p>
-            <hr>
             {% for order in order_list %}
-                <h3>Заказ {{ order.pk }}</h3>
-                <p>Из: {{ order.departure_city }}</p>
-                <p>Отправитель: {{ order.sender_fullname }}</p>
-                <p>В: {{ order.arrival_city }}</p>
-                <p>Получатель:{{ order.recipient_fullname }}</p>
-                <p>Тип груза: {{ order.get_cargo_type_display }}</p>
-                <p>Размеры: {{ order.cargo_len }}см x {{ order.cargo_width }}см x {{ order.cargo_depth }}см
-                    ({{ order.cargo_volume }} м<sup>3</sup>)</p>
-                {% if order.direct_take %}
-                    <p>Забрать из: {{ order.direct_take_address }}</p>
-                {% else %}
-                    <p>Не забирать от отправителя</p>
-                {% endif %}
-                {% if order.direct_deliver %}
-                    <p>Доставить в: {{ order.direct_deliver_address }}</p>
-                {% else %}
-                    <p>Не доставлять получателю</p>
-                {% endif %}
-                <p>Дата отправления: {{ order.departure_date }}</p>
-                <p>Сумма страхования: {{ order.insurance_price }} RUB</p>
-                <p>Дополнительная информация: {{ order.additional_info }} </p>
-                {% if order.application %}
-                    {% if order.application.status == 'CONF' %}
-                        <div class="alert alert-success" role="alert">
-                            Заявка к заказу подтверждена
+
+                <div class="card order-card">
+                    <div class="row card-body">
+                        <h3>Заказ {{ order.pk }}</h3>
+                        <p><b>Дата отправления:</b> {{ order.departure_date }}</p>
+                        <hr>
+                        <div class="col-1">
+                            <p><span class="material-icons">location_city</span></p>
+                            <p><span class="material-icons">face</span></p>
+                            <p><span class="material-icons">logout</span></p>
                         </div>
-                    {% elif order.application.status == 'DECL' %}
-                        <div class="alert alert-danger" role="alert">
-                            Заявка к заказу отклонена
+                        <div class="col-5">
+                            <p><b>Город
+                                отправления:</b> {{ order.departure_city }}</p>
+                            <p><b>Отправитель:</b> {{ order.sender_fullname }}</p>
+                            {% if order.direct_take %}
+                                <p><b>Забрать из:</b> {{ order.direct_take_address }}</p>
+                            {% else %}
+                                <p><b>Не забирать от отправителя</b></p>
+                            {% endif %}
                         </div>
-                    {% elif order.application.status == 'WAIT' %}
-                        <div class="alert alert-warning" role="alert">
-                            Заявка к заказу ожидает подтверждения
+                        <div class="col-1">
+                            <p><span class="material-icons">arrow_forward</span></p>
+                            <p><span class="material-icons">arrow_forward</span></p>
                         </div>
-                    {% endif %}
-                {% else %}
-                    <div class="alert alert-info" role="alert">
-                        Заявка к заказу не создана.
+
+                        <div class="col-5">
+                            <p><b>Город получения:</b> {{ order.arrival_city }}</p>
+                            <p><b>Получатель:</b> {{ order.recipient_fullname }}</p>
+                            {% if order.direct_deliver %}
+                                <p><b>Доставить в:</b> {{ order.direct_deliver_address }}</p>
+                            {% else %}
+                                <p><b>Не доставлять получателю</b></p>
+                            {% endif %}
+                        </div>
+                        <hr>
+                        <div class="col-1">
+                            <span class="material-icons">view_in_ar</span>
+                        </div>
+                        <div class="col-11">
+                            <p><b>Тип груза:</b> {{ order.get_cargo_type_display }}</p>
+                            <p><b>Размеры:</b> {{ order.cargo_len }}см x {{ order.cargo_width }}см
+                                x {{ order.cargo_depth }}см
+                                ({{ order.cargo_volume }} м<sup>3</sup>)</p>
+                        </div>
+                        <hr>
+
+                        <div class="col-1"><span class="material-icons">attach_money</span></div>
+                        <div class="col-11">
+                            <p><b>Сумма страхования:</b> {{ order.insurance_price }} RUB</p>
+                        </div>
+                        <div class="col-1"><span class="material-icons">info</span></div>
+                        <div class="col-11">
+                            <p><b>Дополнительная информация:</b> {{ order.additional_info }} </p>
+                        </div>
+                        {% if order.application %}
+                            {% if order.application.status == 'CONF' %}
+                                <div class="alert alert-success" role="alert">
+                                    Заявка к заказу подтверждена
+                                </div>
+                            {% elif order.application.status == 'DECL' %}
+                                <div class="alert alert-danger" role="alert">
+                                    Заявка к заказу отклонена
+                                </div>
+                            {% elif order.application.status == 'WAIT' %}
+                                <div class="alert alert-warning" role="alert">
+                                    Заявка к заказу ожидает подтверждения
+                                </div>
+                            {% endif %}
+                        {% else %}
+                            <div class="alert alert-info" role="alert">
+                                Заявка к заказу не создана.
+                            </div>
+                        {% endif %}
+
+                        <p><a class="btn btn-outline-primary" href="{% url 'main:ordersendings' order.pk %}">Посмотреть
+                            доступные
+                            отправления</a>
+                        <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Обновить заказ</a>
+                            <a class="btn btn-danger" href="{% url 'main:deleteorder' order.pk %}">Удалить заказ</a></p>
+
                     </div>
-                {% endif %}
+                </div>
 
-                <p><a class="btn btn-primary" href="{% url 'main:ordersendings' order.pk %}">Посмотреть доступные
-                    отправления</a>
-                <p><a class="btn btn-warning" href="{% url 'main:updateorder' order.pk %}">Обновить заказ</a>
-                    <a class="btn btn-danger" href="{% url 'main:deleteorder' order.pk %}">Удалить заказ</a></p>
-
-                <hr>
             {% endfor %}
 
             <ul class="pagination">
