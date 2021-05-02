@@ -10,12 +10,12 @@
             <ul class="navbar-nav">
                 {% if request.user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link {% if 'orders' in request.path %} active {% endif %}"
+                        <a class="nav-link {% if 'orders' in request.path and 'manage' not in request.path %} active {% endif %}"
                            aria-current="page"
                            href="{% url 'main:orders' %}">Мои заказы</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if 'applications' in request.path %} active {% endif %}"
+                        <a class="nav-link {% if 'applications' in request.path and 'manage' not in request.path %} active {% endif %}"
                            aria-current="page"
                            href="{% url 'main:applications' %}">Мои заявки</a>
                     </li>
@@ -33,7 +33,8 @@
                 <ul class="navbar-nav ms-auto">
                     {% if request.user.workerprofile %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            <a class="nav-link {% if 'manage' in request.path %} active {% endif %} dropdown-toggle"
+                               href="#" id="navbarDropdown" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
                                 Моя компания
                             </a>
