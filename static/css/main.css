@@ -31,3 +31,8 @@ h1 {
     margin-bottom: 40px;
     padding: 0;
 }
+
+.progress {
+    padding: 0;
+    height: 20px;
+}
