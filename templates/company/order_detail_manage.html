@@ -8,37 +8,74 @@
     <div class="container">
         <div class="row">
             {% if request.user.workerprofile and application %}
-                <h3>Заказ {{ order.pk }}</h3>
-                <p>Из: {{ order.departure_city }}</p>
-                <p>Отправитель: {{ order.sender_fullname }}</p>
-                <p>В: {{ order.arrival_city }}</p>
-                <p>Получатель:{{ order.recipient_fullname }}</p>
-                <p>Тип груза: {{ order.get_cargo_type_display }}</p>
-                <p>Размеры: {{ order.cargo_len }}см x {{ order.cargo_width }}см x {{ order.cargo_depth }}см
-                    ({{ order.cargo_volume }} м<sup>3</sup>)</p>
-                {% if order.direct_take %}
-                    <p>Забрать из: {{ order.direct_take_address }}</p>
-                {% else %}
-                    <p>Не забирать от отправителя</p>
-                {% endif %}
-                {% if order.direct_deliver %}
-                    <p>Доставить в: {{ order.direct_deliver_address }}</p>
-                {% else %}
-                    <p>Не доставлять получателю</p>
-                {% endif %}
-                <p>Дата отправления: {{ order.departure_date }}</p>
-                <p>Сумма страхования: {{ order.insurance_price }} RUB</p>
-                <p>Дополнительная информация: {{ order.additional_info }} </p>
-                <p>Email заказчика: <a
-                        href="mailto:{{ order.user.email }}">{{ order.user.email }} </a></p>
-                <p>Телефон заказчика: {{ order.user.profile.phone }} </p>
-                <hr>
-                <p>Выбранное отправление: {{ application.sending }}</p>
-                <p>Стоимость: {{ application.price }}</p>
+                <div class="card order-card">
+                <div class="card-header">
+                    <h3>Заказ {{ order.pk }}</h3>
+                </div>
+                <div class="row card-body">
+                    <div class="col-1">
+                        <p><span class="material-icons">location_city</span></p>
+                        <p><span class="material-icons">face</span></p>
+                        <p><span class="material-icons">logout</span></p>
+                    </div>
+                    <div class="col-5">
+                        <p><b>Город
+                            отправления:</b> {{ order.departure_city }}</p>
+                        <p><b>Отправитель:</b> {{ order.sender_fullname }}</p>
+                        {% if order.direct_take %}
+                            <p><b>Забрать из:</b> {{ order.direct_take_address }}</p>
+                        {% else %}
+                            <p><b>Не забирать от отправителя</b></p>
+                        {% endif %}
+                    </div>
+                    <div class="col-1">
+                        <p><span class="material-icons">arrow_forward</span></p>
+                        <p><span class="material-icons">arrow_forward</span></p>
+                    </div>
+
+                    <div class="col-5">
+                        <p><b>Город получения:</b> {{ order.arrival_city }}</p>
+                        <p><b>Получатель:</b> {{ order.recipient_fullname }}</p>
+                        {% if order.direct_deliver %}
+                            <p><b>Доставить в:</b> {{ order.direct_deliver_address }}</p>
+                        {% else %}
+                            <p><b>Не доставлять получателю</b></p>
+                        {% endif %}
+                    </div>
+                    <hr>
+                    <div class="col-1">
+                        <span class="material-icons">view_in_ar</span>
+                    </div>
+                    <div class="col-11">
+                        <p><b>Тип груза:</b> {{ order.get_cargo_type_display }}</p>
+                        <p><b>Размеры:</b> {{ order.cargo_len }}см x {{ order.cargo_width }}см
+                            x {{ order.cargo_depth }}см
+                            ({{ order.cargo_volume }} м<sup>3</sup>)</p>
+                    </div>
+                    <hr>
+
+                    <div class="col-1"><span class="material-icons">attach_money</span></div>
+                    <div class="col-11">
+                        <p><b>Сумма страхования:</b> {{ order.insurance_price }} RUB</p>
+                    </div>
+                    <div class="col-1">
+                        <p><span class="material-icons">info</span></p>
+                        <p><span class="material-icons">email</span></p>
+                        <p><span class="material-icons">call</span></p>
+                    </div>
+                    <div class="col-11">
+                        <p><b>Дополнительная информация:</b> {{ order.additional_info }} </p>
+                        <p><b>Email заказчика:</b> <a
+                                href="mailto:{{ order.user.email }}">{{ order.user.email }} </a></p>
+                        <p><b>Телефон заказчика: </b>{{ order.user.profile.phone }} </p>
+                    </div>
+                </div>
+
 
             {% else %}
                 <p>Вы не можете просматривать данную информацию</p>
             {% endif %}
+            </div>
         </div>
     </div>
 {% endblock %}

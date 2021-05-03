@@ -201,11 +201,14 @@
                                 <p><span class="material-icons">schedule</span></p>
                             </div>
                             <div class="col-5"><p><b>Дата отправления: </b>{{ application.sending.departure_date }}</p>
+                                <p><b>Склад отправления: </b>{{ application.sending.departure_warehouse }}</p>
                             </div>
                             <div class="col-1">
                                 <p><span class="material-icons">arrow_forward</span></p>
+                                <p><span class="material-icons">arrow_forward</span></p>
                             </div>
-                            <div class="col-5"><p><b>Дата прибытия: </b>{{ application.sending.arrival_date }}</p></div>
+                            <div class="col-5"><p><b>Дата прибытия: </b>{{ application.sending.arrival_date }}</p>
+                                <p><b>Склад получения: </b>{{ application.sending.arrival_warehouse }}</p></div>
                             <hr>
                             <div class="col-1">
                                 <p><span class="material-icons">check</span></p>
