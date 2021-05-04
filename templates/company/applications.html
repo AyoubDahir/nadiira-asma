@@ -8,36 +8,51 @@
     <div class="container">
         <div class="row">
             <h3>Заявки для вашей компании</h3>
-            <hr>
             {% for application in application_list %}
-                <br>
-                <p><a href="{% url 'company:detailordermanage' application.order.pk %}">{{ application.order }}</a></p>
-                <p>{{ application.sending }}</p>
-                <p> Стоимость: {{ application.price }} руб.</p>
-                <p>Email заказчика: <a
-                        href="mailto:{{ application.order.user.email }}">{{ application.order.user.email }} </a></p>
-                <p>Телефон заказчика: {{ application.order.user.profile.phone }} </p>
-                {% if application.status == 'WAIT' %}
-                    <div class="alert alert-warning" role="alert">
-                        <p>Статус: {{ application.get_status_display }}</p>
-                        <p>{{ application.info }}</p>
+                <div class="card order-card">
+                    <div class="row card-body">
+                        <div class="col-1">
+                            <p><span class="material-icons">description</span></p>
+                            <p><span class="material-icons">local_shipping</span></p>
+                            <p><span class="material-icons">attach_money</span></p>
+                            <p><span class="material-icons">email</span></p>
+                            <p><span class="material-icons">call</span></p>
+                        </div>
+                        <div class="col-11">
+                            <p>
+                                <a href="{% url 'company:detailordermanage' application.order.pk %}">{{ application.order }}</a>
+                            </p>
+                            <p><a href="{% url 'company:updatesending' application.sending.pk %}">
+                                {{ application.sending }}
+                            </a></p>
+                            <p> Стоимость: {{ application.price }} руб.</p>
+                            <p>Email заказчика: <a
+                                    href="mailto:{{ application.order.user.email }}">{{ application.order.user.email }} </a>
+                            </p>
+                            <p>Телефон заказчика: {{ application.order.user.profile.phone }} </p>
+
+                        </div>
+                        {% if application.status == 'WAIT' %}
+                            <div class="alert alert-warning" role="alert">
+                                <p>Статус: {{ application.get_status_display }}</p>
+                                <p>{{ application.info }}</p>
+                            </div>
+                        {% elif application.status == 'CONF' %}
+                            <div class="alert alert-success" role="alert">
+                                <p>Статус: {{ application.get_status_display }}</p>
+                                <p>{{ application.info }}</p>
+                            </div>
+                        {% elif application.status == 'DECL' %}
+                            <div class="alert alert-danger" role="alert">
+                                <p>Статус: {{ application.get_status_display }}</p>
+                                <p>{{ application.info }}</p>
+                            </div>
+                        {% endif %}
+                        <p><a class="btn btn- btn-success"
+                              href="{% url 'company:updateapplicationmanage' application.pk %}">Управлять
+                            заявкой</a></p>
                     </div>
-                {% elif application.status == 'CONF' %}
-                    <div class="alert alert-success" role="alert">
-                        <p>Статус: {{ application.get_status_display }}</p>
-                        <p>{{ application.info }}</p>
-                    </div>
-                {% elif application.status == 'DECL' %}
-                    <div class="alert alert-danger" role="alert">
-                        <p>Статус: {{ application.get_status_display }}</p>
-                        <p>{{ application.info }}</p>
-                    </div>
-                {% endif %}
-                <p><a class="btn btn- btn-success" href="{% url 'company:updateapplicationmanage' application.pk %}">Управлять
-                    заявкой</a></p>
-                <br>
-                <hr>
-                <br>
+                </div>
             {% endfor %}
             <ul class="pagination">
 
