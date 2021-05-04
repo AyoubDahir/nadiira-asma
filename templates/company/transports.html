@@ -12,17 +12,24 @@
                     <a class="btn btn-success" href="{% url 'company:addtransport' %}">Добавить транспорт</a>
                     <br><br>
                     {% for transport in transport_list %}
-                        <li>{{ transport.get_transport_type_display }}
-                            <br>
-                            {{ transport.number }}
+                        <div class="card order-card">
+                            <div class="row card-body">
+                                <div class="col-1">
+                                    <p><span class="material-icons">commute</span></p>
+                                    <p><span class="material-icons">tag</span></p>
 
-                            <br>
-                            <a class="btn btn-warning" href="{% url 'company:updatetransport' transport.pk %}">Редактировать</a>
-                            <a class="btn btn-danger"
-                               href="{% url 'company:deletetransport' transport.pk %}">Удалить</a>
+                                </div>
+                                <div class="col-11">
+                                    <p><b>Тип транспорта: </b>{{ transport.get_transport_type_display }}</p>
+                                    <p><b>Номер транспорта: </b>{{ transport.number }}</p>
+                                </div>
 
-                            <br><br>
-                        </li>
+                                <p><a class="btn btn-warning" href="{% url 'company:updatetransport' transport.pk %}">Редактировать</a>
+                                    <a class="btn btn-danger"
+                                       href="{% url 'company:deletetransport' transport.pk %}">Удалить</a></p>
+
+                            </div>
+                        </div>
                     {% endfor %}
                     <ul class="pagination">
 
