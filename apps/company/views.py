@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from CargoDelivery import settings
 from apps.company.forms import WorkerProfileForm, WarehouseForm, TransportForm, SendingForm, ApplicationManageForm
@@ -319,6 +319,16 @@ class SendingList(LoginRequiredMixin, ListView):
             raise Http404
         else:
             return queryset
+
+
+class SendingDetail(LoginRequiredMixin, DeleteView):
+    """
+    View for detail of sending
+    """
+
+    model = Sending
+    template_name = 'company/sending_detail.html'
+
 
 
 class ApplicationListManage(LoginRequiredMixin, ListView):

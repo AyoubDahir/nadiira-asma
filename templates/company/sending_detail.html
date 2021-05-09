@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load mathfilters %}
+{% load auth_extras %}
+
+{% block title %}Детали заказа{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            {% if request.user.workerprofile %}
+                <div class="card order-card">
+                <div class="card-header">
+                    <h3>Отправление №{{ sending.pk }}</h3>
+                </div>
+                <div class="row card-body">
+                    <div class="col-1">
+                        <p><span class="material-icons">location_city</span></p>
+                        <p><span class="material-icons">event</span></p>
+
+                    </div>
+                    <div class="col-5">
+                        <p><b>Склад
+                            отправления:</b> {{ sending.departure_warehouse }}</p>
+                        <p><b>Дата отправления: </b>{{ sending.departure_date }}</p>
+
+                    </div>
+                    <div class="col-1">
+                        <p><span class="material-icons">arrow_forward</span></p>
+                        <p><span class="material-icons">arrow_forward</span></p>
+
+                    </div>
+
+                    <div class="col-5">
+                        <p><b>Склад получения:</b> {{ sending.arrival_warehouse }}</p>
+                        <p><b>Дата прибытия: </b>{{ sending.arrival_date }}</p>
+
+                    </div>
+                    <hr>
+                    <div class="col-1">
+                        <p><span class="material-icons">local_shipping</span></p>
+                    </div>
+                    <div class="col-11">
+                        <p><b>Транспорт: </b>{{ sending.transport.get_transport_type_display }}
+                            ({{ sending.transport.number }})</p>
+                    </div>
+                    <hr>
+                    <div class="col-1">
+                        <p><span class="material-icons">view_in_ar</span></p>
+                    </div>
+                    <div class="col-5">
+                        <p><b>Общий объём: </b>{{ sending.total_volume }}</p>
+                    </div>
+                    <div class="col-6">
+                        <p><b>Свободный объём: </b>{{ sending.free_volume }}</p>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar"
+                             style="width: {{ sending.free_volume|mul:100|intdiv:sending.total_volume }}%;">
+                            <b>{{ sending.free_volume|div:sending.total_volume|mul:100 }}%</b>
+                        </div>
+                    </div>
+                    <br><br>
+                    <hr>
+                    <ul class="list-group">
+                        {% if sending.orders.count > 0 %}
+                            <p class="text-center"><b>Заказы в отправлении:</b></p>
+                            {% for order in sending.orders.all %}
+                                <li class="list-group-item">{{ order.user.last_name }} {{ order.user.first_name }}. {{ order.cargo_volume }}м<sup>3</sup>.
+                                    {{ order.cargo_weight }} кг
+                                    Стоимость: {{ order.cargo_volume|mul:sending.price_for_m3|floatformat:"2" }}
+                                    <a href="{% url 'company:detailordermanage' order.pk %}">Подробнее</a>
+                                </li>
+                                <br>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-center"><b>Заказов к отправлению нет</b></p>
+                        {% endif %}
+                    </ul>
+                    <hr>
+                    <p><a class="btn btn-warning"
+                          href="{% url 'company:updatesending' sending.pk %}">Редактировать</a>
+                        <a class="btn btn-danger"
+                           href="{% url 'company:deletesending' sending.pk %}">Удалить</a></p>
+                    <br><br>
+                </div>
+
+            {% else %}
+                <p>Вы не можете просматривать данную информацию</p>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

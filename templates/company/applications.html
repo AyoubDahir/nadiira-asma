@@ -22,7 +22,7 @@
                             <p>
                                 <a href="{% url 'company:detailordermanage' application.order.pk %}">{{ application.order }}</a>
                             </p>
-                            <p><a href="{% url 'company:updatesending' application.sending.pk %}">
+                            <p><a href="{% url 'company:sendingdetail' application.sending.pk %}">
                                 {{ application.sending }}
                             </a></p>
                             <p> Стоимость: {{ application.price }} руб.</p>

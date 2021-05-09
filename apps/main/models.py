@@ -197,6 +197,17 @@ class Application(models.Model):
         return f'{self.get_status_display()}. {self.order}. {self.sending}'
 
 
+class TransitPoint(models.Model):
+    sending = models.ForeignKey(Sending, on_delete=models.CASCADE,
+                                verbose_name='Отправление')
+    transport = models.ForeignKey(Transport, on_delete=models.CASCADE,
+                                  verbose_name='Транспорт (до следующего пункта маршрута)')
+    arrival_date = models.DateField(verbose_name='Дата прибытия (в данный пункт)')
+
+    arrival_city = models.ForeignKey(City, on_delete=models.CASCADE,
+                                     verbose_name='Город прибытия')
+
+
 @receiver(post_save, sender=Sending)
 def new_sendings_email(sender, instance, created, **kwargs):
     """
