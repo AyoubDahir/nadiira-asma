@@ -1,7 +1,7 @@
 from django import forms
 
 from apps.company.models import WorkerProfile
-from apps.main.models import Warehouse, Transport, Sending, Application
+from apps.main.models import Warehouse, Transport, Sending, Application, TransitPoint
 
 
 class WorkerProfileForm(forms.ModelForm):
@@ -79,3 +79,22 @@ class ApplicationManageForm(forms.ModelForm):
     class Meta:
         model = Application
         fields = ('order', 'sending', 'status', 'info')
+
+
+class TransitPointForm(forms.ModelForm):
+    """
+    Form for transit points of sending
+    """
+
+    def __init__(self, *args, **kwargs):
+        if kwargs.get('user'):
+            self.user = kwargs.pop('user', None)
+
+        super(TransitPointForm, self).__init__(*args, **kwargs)
+
+        self.fields['transport'].queryset = Transport.objects.filter(
+            company__workerprofile__user=self.user)
+
+    class Meta:
+        model = TransitPoint
+        fields = ('transport', 'arrival_warehouse', 'arrival_date')

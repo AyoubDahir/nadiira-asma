@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load auth_extras %}
+{% load crispy_forms_filters %}
+
+{% block title %}Удалить отправление{% endblock %}
+
+{% block content %}
+    <br>
+    <div class="container">
+        <div class="row">
+            <br>
+            <br>
+            {% if request.user.workerprofile.company == object.sending.company %}
+                <p>Вы действительно хотите удалить
+                    <b>Отправление №{{ object.sending.pk }}. Транспорт: {{ object.transport }}. Дата
+                        прибытия: {{ object.arrival_date }} </b>?</p>
+                <form method="post">{% csrf_token %}
+                    {{ form|crispy }}
+                    <br>
+                    <input class="btn btn-danger" type="submit" value="Удалить">
+                </form>
+            {% else %}
+                <p>У вас нет прав для этого действия</p>
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

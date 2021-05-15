@@ -1,12 +1,13 @@
 from django.contrib import admin
 
-from apps.main.models import Country, City, Warehouse, Order, Transport, Sending, Application
+from apps.main.models import Country, City, Warehouse, Order, Transport, Sending, Application, TransitPoint
 
 admin.site.register(Country)
 admin.site.register(City)
 admin.site.register(Warehouse)
 admin.site.register(Order)
 admin.site.register(Transport)
+admin.site.register(TransitPoint)
 
 
 @admin.register(Application)

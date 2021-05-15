@@ -54,7 +54,6 @@
                     <div class="col-6">
                         <p><b>Свободный объём: </b>{{ sending.free_volume }}</p>
                     </div>
-
                     <div class="progress">
                         <div class="progress-bar bg-success" role="progressbar"
                              style="width: {{ sending.free_volume|mul:100|intdiv:sending.total_volume }}%;">
@@ -62,6 +61,26 @@
                         </div>
                     </div>
                     <br><br>
+                    <hr>
+                    <div>
+                        <p class="text-center"><b>Транзитные пункты:</b></p>
+                        {% for point in transit_points %}
+                            <div class="card order-card">
+                                <div class="row card-body">
+                                    <p><b>Транзитный склад: </b>{{ point.arrival_warehouse }}</p>
+                                    <p><b>Дата прибытия: </b>{{ point.arrival_date }}</p>
+                                    <p><b>Транспорт: </b>{{ point.transport }}</p>
+                                    <p><a class="btn btn-danger"
+                                          href="{% url 'company:deletepoint' point.pk %}">Удалить пункт</a>
+                                        <a class="btn btn-warning"
+                                           href="{% url 'company:updatepoint' point.pk %}">Редактировать пункт</a>
+                                    </p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        <p><a class="btn btn-success"
+                              href="{% url 'company:addpoint' sending.pk %}">Добавить пункт</a></p>
+                    </div>
                     <hr>
                     <ul class="list-group">
                         {% if sending.orders.count > 0 %}

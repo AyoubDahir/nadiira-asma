@@ -204,8 +204,11 @@ class TransitPoint(models.Model):
                                   verbose_name='Транспорт (до следующего пункта маршрута)')
     arrival_date = models.DateField(verbose_name='Дата прибытия (в данный пункт)')
 
-    arrival_city = models.ForeignKey(City, on_delete=models.CASCADE,
-                                     verbose_name='Город прибытия')
+    arrival_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
+                                     verbose_name='Транзитный склад')
+
+    def __str__(self):
+        return f'Транзитный пункт. {self.sending}, {self.transport}, {self.arrival_date}, {self.arrival_warehouse}'
 
 
 @receiver(post_save, sender=Sending)
