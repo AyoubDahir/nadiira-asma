@@ -1,12 +1,13 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, TemplateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from CargoDelivery import settings
-from apps.company.forms import WorkerProfileForm, WarehouseForm, TransportForm, SendingForm, ApplicationManageForm
+from apps.company.forms import WorkerProfileForm, WarehouseForm, TransportForm, SendingForm, ApplicationManageForm, \
+    TransitPointForm
 from apps.company.models import WorkerProfile, Company
-from apps.main.models import Warehouse, Transport, Sending, Application, Order
+from apps.main.models import Warehouse, Transport, Sending, Application, Order, TransitPoint
 
 
 class CreateWorkerProfile(LoginRequiredMixin, CreateView):
@@ -292,7 +293,7 @@ class UpdateSending(LoginRequiredMixin, UpdateView):
 
 class DeleteSending(LoginRequiredMixin, DeleteView):
     """
-    View for updating of transport company sending
+    View for deleting of transport company sending
 
     """
     model = Sending
@@ -319,6 +320,21 @@ class SendingList(LoginRequiredMixin, ListView):
             raise Http404
         else:
             return queryset
+
+
+class SendingDetail(LoginRequiredMixin, DeleteView):
+    """
+    View for detail of sending
+    """
+
+    model = Sending
+    template_name = 'company/sending_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        transit_points = TransitPoint.objects.filter(sending=self.object)
+        context['transit_points'] = transit_points
+        return context
 
 
 class ApplicationListManage(LoginRequiredMixin, ListView):
@@ -385,3 +401,71 @@ class OrderDetailManage(LoginRequiredMixin, DetailView):
         if application.sending.company == self.request.user.workerprofile.company:
             context['application'] = application
         return context
+
+
+class CreateTransitPoint(LoginRequiredMixin, CreateView):
+    """
+    View for creation of transit point for sendings
+    (for companies)
+    """
+    model = TransitPoint
+    template_name = 'company/forms/create_form.html'
+    form_class = TransitPointForm
+    login_url = 'login/'
+    success_url = reverse_lazy('company:listsending')
+
+    def get_form_kwargs(self):
+        kwargs = super(CreateTransitPoint, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        """
+        Substitution of selected sending
+        :param form:
+        :return:
+        """
+        form.instance.sending = Sending.objects.get(pk=self.kwargs['pk'])
+        if self.request.user.workerprofile.company == form.instance.sending.company:
+            return super().form_valid(form)
+        else:
+            raise Http404('You can not do it')
+
+
+class DeleteTransitPoint(LoginRequiredMixin, DeleteView):
+    """
+    View for deleting of transport company transit point
+
+    """
+    model = TransitPoint
+    template_name = 'company/forms/delete_transitpoint_form.html'
+    success_url = reverse_lazy('company:listsending')
+
+
+class UpdateTransitPoint(LoginRequiredMixin, UpdateView):
+    """
+    View for updating of transit point
+
+    """
+    model = TransitPoint
+    template_name = 'company/forms/update_transitpoint_form.html'
+    form_class = TransitPointForm
+    login_url = 'login/'
+    success_url = reverse_lazy('company:listsending')
+
+    def get_form_kwargs(self):
+        kwargs = super(UpdateTransitPoint, self).get_form_kwargs()
+        user = self.request.user
+        if user:
+            kwargs['user'] = user
+
+        return kwargs
+
+    def form_valid(self, form):
+        """
+        Set sending same as editing
+        :param form:
+        :return:
+        """
+        form.instance.sending = Sending.objects.get(pk=self.kwargs['pk'])
+        return super().form_valid(form)

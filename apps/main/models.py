@@ -197,6 +197,20 @@ class Application(models.Model):
         return f'{self.get_status_display()}. {self.order}. {self.sending}'
 
 
+class TransitPoint(models.Model):
+    sending = models.ForeignKey(Sending, on_delete=models.CASCADE,
+                                verbose_name='Отправление')
+    transport = models.ForeignKey(Transport, on_delete=models.CASCADE,
+                                  verbose_name='Транспорт (до следующего пункта маршрута)')
+    arrival_date = models.DateField(verbose_name='Дата прибытия (в данный пункт)')
+
+    arrival_warehouse = models.ForeignKey(Warehouse, on_delete=models.CASCADE,
+                                     verbose_name='Транзитный склад')
+
+    def __str__(self):
+        return f'Транзитный пункт. {self.sending}, {self.transport}, {self.arrival_date}, {self.arrival_warehouse}'
+
+
 @receiver(post_save, sender=Sending)
 def new_sendings_email(sender, instance, created, **kwargs):
     """

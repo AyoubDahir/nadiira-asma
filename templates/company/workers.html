@@ -14,21 +14,31 @@
                     {% endif %}
                     <br><br>
                     {% for worker in workerprofile_list %}
-                        <li>{{ worker.user.first_name }} {{ worker.user.last_name }}
-                            <br>
-                            {{ worker.user.username }}
-                            <br>
-                            {{ worker.company.name }}
-                            <br>
-                            {{ worker.position }}
-                            <br>
-                            {% if request.user|has_group:"owner" %}
-                                <a class="btn btn-warning"
-                                   href="{% url 'company:updateworker' worker.pk %}">Редактировать</a>
-                                <a class="btn btn-danger" href="{% url 'company:deleteworker' worker.pk %}">Удалить</a>
-                            {% endif %}
-                            <br><br>
-                        </li>
+                        <div class="card order-card">
+                            <div class="row card-body">
+                                <div class="col-1">
+                                    <p><span class="material-icons">face</span></p>
+                                    <p><span class="material-icons">account_circle</span></p>
+                                    <p><span class="material-icons">work</span></p>
+
+                                </div>
+                                <div class="col-11">
+                                    <p><b>ФИО: </b>{{ worker.user.first_name }} {{ worker.user.last_name }}</p>
+
+                                    <p><b>Имя пользователя: </b>{{ worker.user.username }}</p>
+
+                                    <p><b>Должность: </b>{{ worker.position }}</p>
+                                </div>
+                                {% if request.user|has_group:"owner" %}
+                                    <p><a class="btn btn-warning"
+                                          href="{% url 'company:updateworker' worker.pk %}">Редактировать</a>
+                                        <a class="btn btn-danger"
+                                           href="{% url 'company:deleteworker' worker.pk %}">Удалить</a></p>
+                                {% endif %}
+                            </div>
+                        </div>
+
+
                     {% endfor %}
                     <ul class="pagination">
 

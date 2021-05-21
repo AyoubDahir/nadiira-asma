@@ -13,18 +13,25 @@
 
                     <br><br>
                     {% for warehouse in warehouse_list %}
-                        <li>{{ warehouse.address }}
-                            <br>
-                            {{ warehouse.city }}
-                            <br>
-                            {{ warehouse.city.country }}
-                            <br>
-                            <a class="btn btn-warning" href="{% url 'company:updatewarehouse' warehouse.pk %}">Редактировать</a>
-                            <a class="btn btn-danger"
-                               href="{% url 'company:deletewarehouse' warehouse.pk %}">Удалить</a>
+                        <div class="card order-card">
+                            <div class="row card-body">
+                                <div class="col-1">
+                                    <p><span class="material-icons">location_on</span></p>
+                                    <p><span class="material-icons">location_city</span></p>
+                                    <p><span class="material-icons">flag</span></p>
 
-                            <br><br>
-                        </li>
+                                </div>
+                                <div class="col-11">
+                                    <p><b>Адрес склада: </b>{{ warehouse.address }}</p>
+                                    <p><b>Город: </b>{{ warehouse.city }}</p>
+                                    <p><b>Страна: </b>{{ warehouse.city.country }}</p>
+                                </div>
+                                <p><a class="btn btn-warning" href="{% url 'company:updatewarehouse' warehouse.pk %}">Редактировать</a>
+                                    <a class="btn btn-danger"
+                                       href="{% url 'company:deletewarehouse' warehouse.pk %}">Удалить</a></p>
+
+                            </div>
+                        </div>
                     {% endfor %}
                     <ul class="pagination">
 
