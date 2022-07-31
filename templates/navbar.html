@@ -12,17 +12,17 @@
                     <li class="nav-item">
                         <a class="nav-link {% if 'orders' in request.path and 'manage' not in request.path %} active {% endif %}"
                            aria-current="page"
-                           href="{% url 'main:orders' %}">Мои заказы</a>
+                           href="{% url 'main:orders' %}">My orders</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if 'applications' in request.path and 'manage' not in request.path %} active {% endif %}"
                            aria-current="page"
-                           href="{% url 'main:applications' %}">Мои заявки</a>
+                           href="{% url 'main:applications' %}">My applications</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {% if 'companies' in request.path %} active {% endif %}"
                            aria-current="page"
-                           href="{% url 'main:company_list' %}">Компании</a>
+                           href="{% url 'main:company_list' %}">Companies</a>
                     </li>
 
                 {% endif %}
@@ -36,22 +36,17 @@
                             <a class="nav-link {% if 'manage' in request.path %} active {% endif %} dropdown-toggle"
                                href="#" id="navbarDropdown" role="button"
                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Моя компания
+                               My company
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" href="{% url 'company:listsending' %}">Отправления вашей
-                                    компании</a></li>
-                                <li><a class="dropdown-item" href="{% url 'company:listapplicationmanage' %}">Заявки
-                                    вашей компании</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company:listsending' %}">Shipments of your company</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company:listapplicationmanage' %}">Your company's applications</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
-                                <li><a class="dropdown-item" href="{% url 'company:listworkers' %}">Работники вашей
-                                    компании</a></li>
-                                <li><a class="dropdown-item" href="{% url 'company:listwarehouse' %}">Склады вашей
-                                    компании</a></li>
-                                <li><a class="dropdown-item" href="{% url 'company:listtransport' %}">Транспорт вашей
-                                    компании</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company:listworkers' %}">Employees of your company</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company:listwarehouse' %}">Warehouses of your company</a></li>
+                                <li><a class="dropdown-item" href="{% url 'company:listtransport' %}">Transport of your company</a></li>
                             </ul>
                         </li>
                     {% endif %}
@@ -63,14 +58,14 @@
                             {% endif %}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_logout' %}">Выйти</a>
+                        <a class="nav-link" href="{% url 'account_logout' %}">Go out</a>
 
                     </li>
                 </ul>
             {% else %}
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'account_login' %}">Войти</a>
+                        <a class="nav-link" href="{% url 'account_login' %}">login</a>
                     </li>
                 </ul>
             {% endif %}

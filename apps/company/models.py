@@ -6,10 +6,10 @@ class Company(models.Model):
     """
     Model of transport company
     """
-    name = models.CharField(max_length=100, unique=True, verbose_name='Название')
+    name = models.CharField(max_length=100, unique=True, verbose_name='name')
     email = models.EmailField(max_length=100, verbose_name='Email')
-    phone = models.CharField(max_length=20, verbose_name='Телефон')
-    info = models.TextField(max_length=5000, blank=True, verbose_name='Информация о компании')
+    phone = models.CharField(max_length=20, verbose_name='phone')
+    info = models.TextField(max_length=5000, blank=True, verbose_name='Extra informations')
 
     def __str__(self):
         return self.name
